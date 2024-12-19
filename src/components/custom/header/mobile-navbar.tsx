@@ -1,9 +1,9 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
 import { ReactNode, useState } from "react";
 
 import { useLockBody } from "@/lib/hooks/use-lock-body";
+import { Menu, X } from "lucide-react";
 
 function MobileMenu({
   onClose,

@@ -1,23 +1,21 @@
-import {
-  Frame,
-  Download,
-  Globe,
-  Sparkles,
-  LayoutPanelLeft,
-  Palette,
-  LucideIcon,
-} from "lucide-react";
-
-import type { CardCarouselProps, CardCarouselItem } from "@/types/blocks";
-
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
-  CarouselPrevious,
   CarouselContent,
   CarouselItem,
   CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import type { CardCarouselItem, CardCarouselProps } from "@/types/blocks";
+import {
+  Download,
+  Frame,
+  Globe,
+  LayoutPanelLeft,
+  LucideIcon,
+  Palette,
+  Sparkles,
+} from "lucide-react";
 
 function iconLookup(icon: string) {
   return {
@@ -44,7 +42,11 @@ function CardCarouselIcon({
   return Icon ? <Icon className={className} size={size} /> : null;
 }
 
-function CardCarouselItem({ heading, subHeading, icon }: Readonly<CardCarouselItem>) {
+function CardCarouselItem({
+  heading,
+  subHeading,
+  icon,
+}: Readonly<CardCarouselItem>) {
   return (
     <CarouselItem className="md:basis-1/2 lg:basis-1/3">
       <div className="h-full p-1">

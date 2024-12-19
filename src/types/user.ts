@@ -7,4 +7,4 @@ export interface StrapiUserData {
 
 export interface StrapiUserMeProps {
   user: StrapiUserData | null;
-} 
+}

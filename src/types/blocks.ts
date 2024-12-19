@@ -1,4 +1,4 @@
-import { LinkProps, ImageProps } from "./base";
+import { ImageProps, LinkProps } from "./base";
 
 type ComponentType =
   | "blocks.hero"
@@ -8,7 +8,7 @@ type ComponentType =
 
 interface Base<
   T extends ComponentType,
-  D extends object = Record<string, unknown>
+  D extends object = Record<string, unknown>,
 > {
   id: number;
   __component?: T;

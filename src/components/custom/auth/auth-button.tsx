@@ -1,18 +1,21 @@
-import Link from "next/link";
-import { getStrapiURL } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { getStrapiURL } from "@/lib/utils";
+import Link from "next/link";
 
 export function AuthButton() {
   const backendUrl = getStrapiURL();
   const path = "/api/connect/github";
   const url = new URL(backendUrl + path);
-  
+
   // http://localhost:1337/api/connect/github
 
   return (
     <form>
       <Button asChild>
-        <Link href={url.href} className="flex justify-center items-center gap-2">
+        <Link
+          href={url.href}
+          className="flex justify-center items-center gap-2"
+        >
           <svg
             className="h-5 w-5 fill-[#ffffff]"
             aria-hidden="true"
@@ -25,7 +28,9 @@ export function AuthButton() {
               clipRule="evenodd"
             />
           </svg>
-          <span className="text-white text-sm font-semibold leading-6">Sign In</span>
+          <span className="text-white text-sm font-semibold leading-6">
+            Sign In
+          </span>
         </Link>
       </Button>
     </form>

@@ -2,8 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from 'next/navigation'
-
+import { usePathname } from "next/navigation";
 
 function activeClassName({ isActive }: { isActive: boolean }) {
   return isActive ? "text-foreground" : "text-muted-foreground";
