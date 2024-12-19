@@ -10,7 +10,6 @@ const config = {
   secure: process.env.NODE_ENV === "production",
 };
 
-console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
 console.log(config, "config");
 
 export const dynamic = "force-dynamic";
@@ -23,13 +22,19 @@ export async function GET(request: Request) {
   if (!token) return NextResponse.redirect(new URL("/", request.url));
 
   const backendUrl = getStrapiURL();
+  console.log(backendUrl, "backendUrl");
+
   const path = `/api/auth/${provider}/callback`;
 
   const url = new URL(backendUrl + path);
   url.searchParams.append("access_token", token);
 
+  console.log(url.href, "url.href");
+
   const res = await fetch(url.href);
   const data = await res.json();
+
+  console.log(data, "data");
 
   const cookieStore = await cookies();
   cookieStore.set("jwt", data.jwt, config);
