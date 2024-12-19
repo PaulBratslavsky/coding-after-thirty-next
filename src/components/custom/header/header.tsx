@@ -24,25 +24,59 @@ const globalPageQuery = qs.stringify({
   },
 });
 
-async function loader(): Promise<HeaderProps | null> {
+/*
+{
+  data: {
+    id: 2,
+    documentId: 'i606uu4ii6lu8qtp3wit7qe0',
+    title: 'Global',
+    description: 'Global settings page',
+    createdAt: '2024-12-19T03:20:19.685Z',
+    updatedAt: '2024-12-19T03:20:19.685Z',
+    publishedAt: '2024-12-19T03:20:19.770Z',
+    header: {
+      id: 2,
+      showSignUp: false,
+      logoText: [Object],
+      navItems: [],
+      cta: null
+    }
+  },
+  meta: {}
+}
+*/
+
+interface HeaderResponse {
+    id: number;
+    documentId: string;
+    title: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;  
+    header: HeaderProps;
+}
+
+
+async function loader(): Promise<HeaderResponse | null> {
   const BASE_URL = getStrapiURL();
   const path = "/api/global";
   const url = new URL(path, BASE_URL);
 
   url.search = globalPageQuery;
 
-  const response = await fetchAPI<HeaderProps | null>(url.href, {
+  const response = await fetchAPI<HeaderResponse | null>(url.href, {
     method: "GET",
   });
 
-  if (response?.data) return null;
+  if (response?.data === null) return null;
 
-  const headerData = response?.data;
-  return headerData;
+  return response?.data;
 }
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
   const data = await loader();
+  
   if (!data) return <div>Header not found - add fallback</div>;
   
   const { logoText, navItems, cta, showSignUp } = data.header;
