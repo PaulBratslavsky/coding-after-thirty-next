@@ -1,0 +1,1 @@
+{"node":{"003d44b02628660f34b29fa91bd9846239bb85ea80":{"workers":{"app/_not-found/page":{"moduleId":"8049","async":false},"app/page":{"moduleId":"8049","async":false},"app/[slug]/page":{"moduleId":"8049","async":false}},"layer":{"app/_not-found/page":"rsc","app/page":"rsc","app/[slug]/page":"rsc"}}},"edge":{},"encryptionKey":"cLkGs74l9LSkq/BSec5LIA3Tb6P4GrcCJ7pW8B/T+4s="}
