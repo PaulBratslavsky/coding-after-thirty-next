@@ -1,7 +1,7 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/connect/[provider]/redirect/route": "app/connect/[provider]/redirect/route.js",
   "/page": "app/page.js",
-  "/[slug]/page": "app/[slug]/page.js",
-  "/connect/[provider]/redirect/route": "app/connect/[provider]/redirect/route.js"
+  "/[slug]/page": "app/[slug]/page.js"
 }

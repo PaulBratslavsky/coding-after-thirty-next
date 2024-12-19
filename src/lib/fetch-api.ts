@@ -49,7 +49,7 @@ export async function fetchAPI<T>(url: string, options: FetchAPIOptions): Promis
       return {
         status: response.status,
         statusText: response.statusText,
-        data,
+        ...data,
         error: false,
       };
     }
