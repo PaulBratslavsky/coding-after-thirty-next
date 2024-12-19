@@ -1,16 +1,15 @@
-import qs from "qs";
-import { StrapiUserMeProps, LinkProps } from "@/types";
-
-import { getStrapiURL } from "@/lib/utils";
-import { fetchAPI } from "@/lib/fetch-api";
-
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { fetchAPI } from "@/lib/fetch-api";
+import { getStrapiURL } from "@/lib/utils";
+import { LinkProps, StrapiUserMeProps } from "@/types";
+import { HeaderProps } from "@/types/base";
+import Link from "next/link";
+import qs from "qs";
+
 import { MobileNavbar } from "./mobile-navbar";
 import { NavLinkItem } from "./nav-link-item";
 
 import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
-import { HeaderProps } from "@/types/base";
 
 const globalPageQuery = qs.stringify({
   populate: {
@@ -24,39 +23,16 @@ const globalPageQuery = qs.stringify({
   },
 });
 
-/*
-{
-  data: {
-    id: 2,
-    documentId: 'i606uu4ii6lu8qtp3wit7qe0',
-    title: 'Global',
-    description: 'Global settings page',
-    createdAt: '2024-12-19T03:20:19.685Z',
-    updatedAt: '2024-12-19T03:20:19.685Z',
-    publishedAt: '2024-12-19T03:20:19.770Z',
-    header: {
-      id: 2,
-      showSignUp: false,
-      logoText: [Object],
-      navItems: [],
-      cta: null
-    }
-  },
-  meta: {}
-}
-*/
-
 interface HeaderResponse {
-    id: number;
-    documentId: string;
-    title: string;
-    description: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;  
-    header: HeaderProps;
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  header: HeaderProps;
 }
-
 
 async function loader(): Promise<HeaderResponse | null> {
   const BASE_URL = getStrapiURL();
@@ -76,9 +52,9 @@ async function loader(): Promise<HeaderResponse | null> {
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
   const data = await loader();
-  
+
   if (!data) return <div>Header not found - add fallback</div>;
-  
+
   const { logoText, navItems, cta, showSignUp } = data.header;
 
   return (
@@ -168,7 +144,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
                   </Button>
                 )}
               </>
-            )}  
+            )}
           </nav>
         </div>
       </MobileNavbar>

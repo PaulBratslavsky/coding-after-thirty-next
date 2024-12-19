@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -47,44 +47,42 @@
   }
 }
 
-
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
-
 
 /******************************************* 
   Rich Text Styles
-*******************************************/ 
+*******************************************/
 
 /* Headers */
 .richtext h1 {
-  @apply text-4xl font-bold mb-4 text-foreground;
+  @apply mb-4 text-4xl font-bold text-foreground;
 }
 
 .richtext h2 {
-  @apply text-3xl font-bold mb-4 text-foreground;
+  @apply mb-4 text-3xl font-bold text-foreground;
 }
 
 .richtext h3 {
-  @apply text-2xl font-bold mb-4 text-foreground;
+  @apply mb-4 text-2xl font-bold text-foreground;
 }
 
 .richtext h4 {
-  @apply text-xl font-bold mb-4 text-foreground;
+  @apply mb-4 text-xl font-bold text-foreground;
 }
 
 .richtext h5 {
-  @apply text-lg font-bold mb-4 text-foreground;
+  @apply mb-4 text-lg font-bold text-foreground;
 }
 
 .richtext h6 {
-  @apply text-base font-bold mb-4 text-foreground;
+  @apply mb-4 text-base font-bold text-foreground;
 }
 
 /* Horizontal rules */
 .richtext hr {
-  @apply border-accent-foreground my-8;
+  @apply my-8 border-accent-foreground;
 }
 
 .richtext a {
@@ -111,16 +109,16 @@ body {
 
 /* Blockquotes */
 .richtext blockquote {
-  @apply border-l-4 border-accent-foreground pl-4 py-2 mb-4;
+  @apply mb-4 border-l-4 border-accent-foreground py-2 pl-4;
 }
 
 /* Lists */
 .richtext ul {
-  @apply list-disc pl-4 mb-4;
+  @apply mb-4 list-disc pl-4;
 }
 
 .richtext ol {
-  @apply list-decimal pl-4 mb-4;
+  @apply mb-4 list-decimal pl-4;
 }
 
 .richtext li {
@@ -128,44 +126,41 @@ body {
 }
 
 .richtext li > ul {
-  @apply list-disc pl-4 mb-2;
+  @apply mb-2 list-disc pl-4;
 }
 
 .richtext li > ol {
-  @apply list-decimal pl-4 mb-2 text-muted-foreground;
+  @apply mb-2 list-decimal pl-4 text-muted-foreground;
 }
 
 /* Code blocks */
 .richtext pre {
-
-  @apply overflow-scroll font-mono bg-gray-900 text-gray-200 rounded p-4  my-6;
+  @apply my-6 overflow-scroll rounded bg-gray-900 p-4 font-mono text-gray-200;
 }
 
 .richtext code {
-  @apply font-mono bg-gray-900 text-gray-200 rounded px-2 py-1;
+  @apply rounded bg-gray-900 px-2 py-1 font-mono text-gray-200;
 }
 
 /* Tables */
 .richtext table {
-  @apply w-full border-collapse border-gray-300 my-6;
+  @apply my-6 w-full border-collapse border-gray-300;
 }
 
 .richtext th {
-  @apply bg-gray-900 text-left py-2 px-4 font-semibold border-b border-gray-300;
+  @apply border-b border-gray-300 bg-gray-900 px-4 py-2 text-left font-semibold;
 }
 
 .richtext td {
-  @apply py-2 px-4 border-b border-gray-300;
+  @apply border-b border-gray-300 px-4 py-2;
 }
 
 /* Images */
 .richtext img {
-  @apply w-full object-cover rounded-xl my-6;
+  @apply my-6 w-full rounded-xl object-cover;
 }
 
 /* Custom containers */
 .richtext .warning {
-  @apply bg-yellow-100 border-yellow-500 text-yellow-700 px-4 py-2 rounded-lg mb-4;
+  @apply mb-4 rounded-lg border-yellow-500 bg-yellow-100 px-4 py-2 text-yellow-700;
 }
-
-

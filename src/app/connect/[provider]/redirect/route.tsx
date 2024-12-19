@@ -10,7 +10,11 @@ const config = {
   secure: process.env.NODE_ENV === "production",
 };
 
+console.log(process.env.NODE_ENV, "process.env.NODE_ENV");
+console.log(config, "config");
+
 export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   const { searchParams, pathname } = new URL(request.url);
   const token = searchParams.get("access_token");

@@ -17,7 +17,10 @@ interface FetchAPIOptions {
   next?: NextFetchRequestConfig;
 }
 
-export async function fetchAPI<T>(url: string, options: FetchAPIOptions): Promise<APIResponse<T>> {
+export async function fetchAPI<T>(
+  url: string,
+  options: FetchAPIOptions
+): Promise<APIResponse<T>> {
   const { method, authToken, body, next } = options;
 
   const requestInit: RequestInit = {
@@ -64,7 +67,7 @@ export async function fetchAPI<T>(url: string, options: FetchAPIOptions): Promis
     console.error(`Error ${method} data:`, error);
     return {
       status: 500,
-      statusText: error instanceof Error ? error.message : 'Unknown error',
+      statusText: error instanceof Error ? error.message : "Unknown error",
       data: null,
       error: true,
     };

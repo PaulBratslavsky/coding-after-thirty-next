@@ -1,5 +1,11 @@
-import type { LinkProps, ImageProps } from "./base";
-import type { CardCarouselProps, HeroProps, HeadingProps, Block, ContentWithImageProps } from "./blocks";
+import type { ImageProps, LinkProps } from "./base";
+import type {
+  Block,
+  CardCarouselProps,
+  ContentWithImageProps,
+  HeadingProps,
+  HeroProps,
+} from "./blocks";
 import type { StrapiUserMeProps } from "./user";
 
 export type {
@@ -10,5 +16,5 @@ export type {
   HeadingProps,
   Block,
   StrapiUserMeProps,
-  ContentWithImageProps
+  ContentWithImageProps,
 };

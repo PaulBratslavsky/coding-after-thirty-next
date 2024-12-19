@@ -1,7 +1,7 @@
-import type { ContentWithImageProps } from "@/types/blocks";
-import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
+import type { ContentWithImageProps } from "@/types/blocks";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
 import { StrapiImage } from "@/components/custom/strapi-image";
 

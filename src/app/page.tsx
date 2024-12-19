@@ -1,10 +1,9 @@
-import qs from "qs";
-import { notFound } from "next/navigation";
-import { Block } from "@/types";
-
+import { BlockRenderer } from "@/components/blocks/block-renderer";
 import { fetchAPI } from "@/lib/fetch-api";
 import { getStrapiURL } from "@/lib/utils";
-import { BlockRenderer } from "@/components/blocks/block-renderer";
+import { Block } from "@/types";
+import { notFound } from "next/navigation";
+import qs from "qs";
 
 const homePageQuery = qs.stringify({
   populate: {
