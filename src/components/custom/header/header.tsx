@@ -1,5 +1,5 @@
 import qs from "qs";
-import { StrapiUserMeProps } from "@/types";
+import { StrapiUserMeProps, LinkProps } from "@/types";
 
 import { getStrapiURL } from "@/lib/utils";
 import { fetchAPI } from "@/lib/fetch-api";
@@ -10,6 +10,7 @@ import { MobileNavbar } from "./mobile-navbar";
 import { NavLinkItem } from "./nav-link-item";
 
 import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
+import { HeaderProps } from "@/types/base";
 
 const globalPageQuery = qs.stringify({
   populate: {
@@ -23,31 +24,28 @@ const globalPageQuery = qs.stringify({
   },
 });
 
-async function loader() {
+async function loader(): Promise<HeaderProps | null> {
   const BASE_URL = getStrapiURL();
   const path = "/api/global";
   const url = new URL(path, BASE_URL);
 
   url.search = globalPageQuery;
 
-  const data = await fetchAPI(url.href, {
+  const response = await fetchAPI<HeaderProps | null>(url.href, {
     method: "GET",
   });
 
-  const headerData = data?.data?.header;
-  return { ...headerData };
-}
+  if (response?.data) return null;
 
-interface NavItem {
-  id: string;
-  label: string;
-  href: string;
-  isExternal: boolean;
+  const headerData = response?.data;
+  return headerData;
 }
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
   const data = await loader();
-  const { logoText, navItems, cta, showSignUp } = data;
+  if (!data) return <div>Header not found - add fallback</div>;
+  
+  const { logoText, navItems, cta, showSignUp } = data.header;
 
   return (
     <header className="flex items-center justify-between gap-10 py-4 container">
@@ -69,7 +67,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
       <div className="flex items-center gap-10">
         <nav className="hidden items-center gap-10 md:flex justify-end">
           {navItems ? (
-            navItems.map((navItem: NavItem) => (
+            navItems.map((navItem: LinkProps) => (
               <NavLinkItem
                 href={navItem.href}
                 isExternal={navItem.isExternal}
@@ -107,7 +105,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
         <div className="rounded-b-lg bg-background py-4 container text-foreground shadow-xl absolute top-0 left-0 right-0">
           <nav className="flex flex-col gap-1 pt-2">
             {navItems ? (
-              navItems.map((navItem: NavItem) => (
+              navItems.map((navItem: LinkProps) => (
                 <NavLinkItem
                   href={navItem.href}
                   isExternal={navItem.isExternal}

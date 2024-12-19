@@ -1,9 +1,12 @@
 import qs from "qs";
-import { notFound } from "next/navigation";
-
 import { fetchAPI } from "@/lib/fetch-api";
 import { getStrapiURL } from "@/lib/utils";
 import { BlockRenderer } from "@/components/blocks/block-renderer";
+import { Block } from "@/types";
+
+interface PageResponse {
+  blocks: Block[];
+} 
 
 const pageQuery = (slug: string) =>
   qs.stringify({
@@ -49,14 +52,13 @@ async function loader(slug: string) {
 
   url.search = pageQuery(slug);
 
-  const data = await fetchAPI(url.href, {
+  const response = await fetchAPI<PageResponse>(url.href, {
     method: "GET",
   });
 
-  if (data?.data.length === 0) notFound();
+  if (response?.data) return null;
 
-  const blocks = data?.data?.[0]?.blocks;
-  return { blocks };
+  return { blocks: [] };
 }
 
 interface DynamicPageRouteProps {
@@ -69,6 +71,6 @@ export default async function DynamicPageRoute({
 }: Readonly<DynamicPageRouteProps>) {
   const { slug } = await params;
   const data = await loader(slug);
-  const blocks = data.blocks;
+  const blocks = data?.blocks || [];
   return <BlockRenderer blocks={blocks} />;
 }

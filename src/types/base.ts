@@ -11,3 +11,13 @@ export interface ImageProps {
   url: string;
   alternativeText: string | null;
 }
+
+export interface HeaderProps {
+  id: number;
+  header: {
+    logoText: LinkProps;
+    navItems: LinkProps[];
+    cta: LinkProps;
+    showSignUp: boolean;
+  }
+}

@@ -1,5 +1,6 @@
 import qs from "qs";
 import { notFound } from "next/navigation";
+import { Block } from "@/types";
 
 import { fetchAPI } from "@/lib/fetch-api";
 import { getStrapiURL } from "@/lib/utils";
@@ -44,13 +45,13 @@ async function loader() {
 
   url.search = homePageQuery;
 
-  const data = await fetchAPI(url.href, {
+  const response = await fetchAPI<Block[] | null>(url.href, {
     method: "GET",
   });
 
-  if (!data?.data) notFound();
+  if (!response?.data) notFound();
 
-  const blocks = data?.data?.blocks || [];
+  const blocks = response?.data || [];
   return { blocks };
 }
 
