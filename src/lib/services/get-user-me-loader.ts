@@ -1,5 +1,4 @@
 import { getStrapiURL } from "@/lib/utils";
-
 import { getAuthToken } from "./get-token";
 
 export async function getUserMeLoader() {

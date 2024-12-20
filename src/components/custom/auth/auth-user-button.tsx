@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import type { StrapiUserMeProps } from "@/types";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
+import type { StrapiUserMeProps } from "@/types";
 import { AuthLogoutButton } from "./auth-logout-button";
 
 export function AuthUserNavButton({ user }: Readonly<StrapiUserMeProps>) {

@@ -1,12 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import type { CardCarouselItem, CardCarouselProps } from "@/types/blocks";
 import {
   Download,
   Frame,
@@ -16,6 +7,16 @@ import {
   Palette,
   Sparkles,
 } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import type { CardCarouselItem, CardCarouselProps } from "@/types/blocks";
 
 function iconLookup(icon: string) {
   return {

@@ -1,8 +1,9 @@
+import qs from "qs";
+
 import { BlockRenderer } from "@/components/blocks/block-renderer";
 import { fetchAPI } from "@/lib/fetch-api";
 import { getStrapiURL } from "@/lib/utils";
 import { Block } from "@/types";
-import qs from "qs";
 
 interface PageResponse {
   blocks: Block[];

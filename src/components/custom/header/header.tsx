@@ -1,15 +1,14 @@
+import Link from "next/link";
+import qs from "qs";
+
+import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
 import { Button } from "@/components/ui/button";
 import { fetchAPI } from "@/lib/fetch-api";
 import { getStrapiURL } from "@/lib/utils";
 import { LinkProps, StrapiUserMeProps } from "@/types";
 import { HeaderProps } from "@/types/base";
-import Link from "next/link";
-import qs from "qs";
-
 import { MobileNavbar } from "./mobile-navbar";
 import { NavLinkItem } from "./nav-link-item";
-
-import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
 
 const globalPageQuery = qs.stringify({
   populate: {

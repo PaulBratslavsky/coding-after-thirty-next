@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
-import type { ContentWithImageProps } from "@/types/blocks";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
 import { StrapiImage } from "@/components/custom/strapi-image";
+import { cn } from "@/lib/utils";
+import type { ContentWithImageProps } from "@/types/blocks";
 
 export function ContentWithImage(data: Readonly<ContentWithImageProps>) {
   if (!data) return null;

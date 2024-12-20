@@ -3,6 +3,10 @@
 // Libs & Utils
 import { useEffect } from "react";
 
+// UI Components
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+
 import {
   Accordion,
   AccordionContent,
@@ -17,9 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// UI Components
-import { AlertCircle } from "lucide-react";
-import Link from "next/link";
 
 export default function ErrorPage({
   error,

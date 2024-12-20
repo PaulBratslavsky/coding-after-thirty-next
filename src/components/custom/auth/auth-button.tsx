@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { getStrapiURL } from "@/lib/utils";
-import Link from "next/link";
 
 export function AuthButton() {
   const backendUrl = getStrapiURL();
