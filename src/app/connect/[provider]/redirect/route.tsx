@@ -1,6 +1,7 @@
-import { getStrapiURL } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+import { getStrapiURL } from "@/lib/utils";
 
 const config = {
   maxAge: 60 * 60 * 24 * 7, // 1 week

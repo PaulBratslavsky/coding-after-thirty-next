@@ -13,11 +13,10 @@
     "",
     "<THIRD_PARTY_MODULES>",
     "",
+    "^@/(.*)$",
     "^[./]",
-    "",
     "^@/components/custom/(.*)$",
-    "",
-    "^@/components/forms/(.*)$",
-    ""
-  ]
+    "^@/components/forms/(.*)$"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"]
 }
