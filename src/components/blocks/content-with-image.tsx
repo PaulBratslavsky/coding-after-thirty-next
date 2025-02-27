@@ -35,7 +35,7 @@ export function ContentWithImage(data: Readonly<ContentWithImageProps>) {
             {heading}
           </h2>
         </div>
-        <ReactMarkdown className="richtext text-lg text-muted-foreground max-w-lg text-left">
+        <ReactMarkdown>
           {text}
         </ReactMarkdown>
         {link && (
