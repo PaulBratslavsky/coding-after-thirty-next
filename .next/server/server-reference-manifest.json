@@ -1,17 +1,1 @@
-{
-  "node": {
-    "009cbbea4751a46012fe3f94fb29bd0150a1607a7f": {
-      "workers": {
-        "app/page": {
-          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fpaul%2Fprojects%2Flms-next%2Fsrc%2Fcomponents%2Fcustom%2Fauth%2Fauth-logout-button.tsx%22%2C%5B%7B%22id%22%3A%22009cbbea4751a46012fe3f94fb29bd0150a1607a7f%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/page": "rsc"
-      }
-    }
-  },
-  "edge": {},
-  "encryptionKey": "cLkGs74l9LSkq/BSec5LIA3Tb6P4GrcCJ7pW8B/T+4s="
-}
+{"node":{"008bac6db5b4329b3d54020d07bfe89dac403e90ed":{"workers":{"app/_not-found/page":{"moduleId":"2963","async":false},"app/page":{"moduleId":"2963","async":false}},"layer":{"app/_not-found/page":"rsc","app/page":"rsc"}}},"edge":{},"encryptionKey":"SvJEBiGq0X3z/flaft2OmSmObGRw9nQg8P8fpJb+1v8="}
