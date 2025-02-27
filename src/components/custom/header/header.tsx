@@ -1,61 +1,25 @@
 import Link from "next/link";
-import qs from "qs";
+
+import { HeaderProps } from "@/types/base";
+import { notFound } from "next/navigation";
+import { getGlobalData } from "@/data/loaders";
 
 import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
 import { Button } from "@/components/ui/button";
-import { fetchAPI } from "@/lib/fetch-api";
-import { getStrapiURL } from "@/lib/utils";
 import { LinkProps, StrapiUserMeProps } from "@/types";
-import { HeaderProps } from "@/types/base";
 import { MobileNavbar } from "./mobile-navbar";
 import { NavLinkItem } from "./nav-link-item";
 
-const globalPageQuery = qs.stringify({
-  populate: {
-    header: {
-      populate: {
-        logoText: true,
-        navItems: true,
-        cta: true,
-      },
-    },
-  },
-});
-
-interface HeaderResponse {
-  id: number;
-  documentId: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  header: HeaderProps;
-}
-
-async function loader(): Promise<HeaderResponse | null> {
-  const BASE_URL = getStrapiURL();
-  const path = "/api/global";
-  const url = new URL(path, BASE_URL);
-
-  url.search = globalPageQuery;
-
-  const response = await fetchAPI<HeaderResponse | null>(url.href, {
-    method: "GET",
-  });
-
-  if (response?.data === null) return null;
-
-  return response?.data;
+async function loader(): Promise<HeaderProps> {
+  const data = await getGlobalData() 
+  if (!data?.data) notFound();
+  const header = data?.data?.header;
+  return header;
 }
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
-  const data = await loader();
-
-  if (!data) return <div>Header not found - add fallback</div>;
-
-  const { logoText, navItems, cta, showSignUp } = data.header;
-
+  const headerData = await loader();
+  const { logoText, navItems, cta, showSignUp } = headerData;
   return (
     <header className="flex items-center justify-between gap-10 py-4 container">
       <Link href={logoText.href} className="flex items-center gap-3">
