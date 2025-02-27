@@ -1,17 +1,12 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-
 import { Menu, X } from "lucide-react";
-
-import { useLockBody } from "@/lib/hooks/use-lock-body";
 
 function MobileMenu({
   onClose,
   children,
 }: Readonly<{ onClose: () => void; children: ReactNode }>) {
-  useLockBody();
-
   return (
     <button
       className="fixed inset-0 top-[60px] z-50 size-full overflow-auto bg-black/40 animate-in slide-in-from-top-24 md:hidden"

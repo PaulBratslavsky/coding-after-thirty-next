@@ -12,7 +12,7 @@ export function AuthButton() {
 
   return (
     <form>
-      <Button asChild>
+      <Button asChild variant="ghost">
         <Link
           href={url.href}
           className="flex justify-center items-center gap-2"
