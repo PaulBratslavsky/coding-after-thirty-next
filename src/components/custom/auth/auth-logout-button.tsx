@@ -1,28 +1,26 @@
-import { LogOut } from "lucide-react";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client"
 
-const config = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
-  path: "/",
-  domain: process.env.HOST ?? "localhost",
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-};
-
-async function logoutAction() {
-  "use server";
-  const cookieStore = await cookies();
-  cookieStore.set("jwt", "", { ...config, maxAge: 0 });
-  redirect("/");
-}
+import { LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function AuthLogoutButton() {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout API route
+      await fetch("/api/logout")
+      // Refresh the page to reflect the logged out state
+      router.refresh()
+    } catch (error) {
+      console.error("Logout failed:", error)
+    }
+  }
+
   return (
-    <form action={logoutAction}>
-      <button type="submit" className="flex items-center gap-2">
-        <LogOut className="w-6 h-6" />
-      </button>
-    </form>
-  );
+    <button onClick={handleLogout} className="flex items-center gap-2" aria-label="Log out">
+      <LogOut className="w-6 h-6" />
+    </button>
+  )
 }
+
