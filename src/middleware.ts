@@ -4,8 +4,8 @@ import { getUserMeLoader } from "@/lib/services/user"
 
 // Define an array of protected routes
 const protectedRoutes: string[] = [
-  // "/dashboard",
-  // "/dashboard/*", // This will match any path that starts with /dashboard/
+  "/dashboard",
+  "/dashboard/*", // This will match any path that starts with /dashboard/
 ]
 
 // Helper function to check if a path is protected
