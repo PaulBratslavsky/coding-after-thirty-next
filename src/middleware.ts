@@ -3,18 +3,19 @@ import type { NextRequest } from "next/server"
 import { getUserMeLoader } from "@/lib/services/user"
 
 // Define an array of protected routes
-const protectedRoutes = [
-  "/dashboard",
-  "/dashboard/*", // This will match any path that starts with /dashboard/
+const protectedRoutes: string[] = [
+  // "/dashboard",
+  // "/dashboard/*", // This will match any path that starts with /dashboard/
 ]
 
 // Helper function to check if a path is protected
 function isProtectedRoute(path: string): boolean {
+  if (!path || protectedRoutes.length === 0) return false;
   return protectedRoutes.some((route) => {
     // For exact matches
     if (!route.includes("*")) {
       return path === route
-    }
+    }   
 
     // For wildcard routes (e.g., /dashboard/*)
     const basePath = route.replace("/*", "")
