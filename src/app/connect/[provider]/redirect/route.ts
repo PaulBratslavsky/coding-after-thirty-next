@@ -15,8 +15,6 @@ export async function GET(
   const backendUrl = getStrapiURL();
   const path = `/api/auth/${provider}/callback`;
 
-  console.log("Provider and URL:", provider, backendUrl + path);
-
   const url = new URL(backendUrl + path);
   url.searchParams.append("access_token", token);
 
@@ -29,7 +27,6 @@ export async function GET(
     }
     
     const data = await res.json();
-    console.log("Auth data received:", { jwt: data.jwt ? "JWT present" : "No JWT" });
 
     // Create the redirect response first
     const redirectUrl = new URL("/courses", request.url);
@@ -46,7 +43,6 @@ export async function GET(
       sameSite: "lax"
     });
     
-    console.log("Cookie set on response");
     return response;
   } catch (error) {
     console.error("Error during auth callback:", error);
