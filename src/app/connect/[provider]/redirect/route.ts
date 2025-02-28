@@ -40,5 +40,7 @@ export async function GET(
   const cookieStore = await cookies();
   cookieStore.set("jwt", data.jwt, config);
 
+  console.log("*****************", cookieStore, "*****************");
+
   return NextResponse.redirect(new URL("/courses", request.url));
 }
