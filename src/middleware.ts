@@ -4,7 +4,7 @@ import { getUserMeLoader } from "@/lib/services/user";
 
 // Define an array of protected routes
 const protectedRoutes = [
-  "/cart",
+  "/dashboard",
   // Add more protected routes here
 ];
 
