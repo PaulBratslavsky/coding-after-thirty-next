@@ -25,25 +25,22 @@ interface LessonListProps {
   description: string;
 }
 
-interface ParamsProps {  
-  courseSlug: string
-  lessonSlug: string
+interface ParamsProps {
+  courseSlug: string;
+  lessonSlug: string;
 }
 
 export default async function DashboardRoute({
   params,
   children,
 }: {
-  readonly params: ParamsProps;
+  readonly params: Promise<ParamsProps>;
   readonly children: React.ReactNode;
 }) {
-
-
-  const courseSlug = params?.courseSlug;
-  console.log(params);
+  const resolvedParams = await params;  
+  const courseSlug = resolvedParams.courseSlug;
 
   const data = await loader(courseSlug);
-  console.log(data, "why is this not working");
   const courseList = data.lessons;
 
   return (
