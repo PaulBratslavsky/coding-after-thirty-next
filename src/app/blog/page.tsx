@@ -29,7 +29,6 @@ interface PostProps {
 
 async function loader(currentPage: number, query: string, category: string) {
   const data = await getBlogPosts(currentPage, query, category);
-  console.log(data, "data");
   return { data: data.data, meta: data.meta };
 }
 

@@ -1,4 +1,4 @@
-import { blogSdk, sdk } from "@/lib/sdk";
+import { resourcesSdk, sdk } from "@/lib/sdk";
 const PAGE_SIZE = 6;
 
 export async function getHomePage() {
@@ -90,7 +90,7 @@ export async function getBlogPosts(
   queryString: string,
   category: string
 ) {
-  const posts = await blogSdk.collection("posts").find({
+  const posts = await resourcesSdk.collection("posts").find({
     populate: {
       image: {
         fields: ["url", "alternativeText", "name"],
@@ -125,7 +125,7 @@ export async function getBlogPosts(
 }
 
 export async function getBlogPostBySlug(slug: string) {
-  const data = await blogSdk.collection("posts").find({
+  const data = await resourcesSdk.collection("posts").find({
     filters: {
       slug: slug,
     },
@@ -133,6 +133,40 @@ export async function getBlogPostBySlug(slug: string) {
       image: {
         fields: ["url", "alternativeText", "name"],
       },
+    },
+  });
+  return data;
+}
+
+export async function getAllSongs(page: number, queryString: string) {
+  const data = await resourcesSdk.collection("songs").find({
+    sort: ["createdAt:desc"],
+    populate: {
+      artist: {
+        fields: ["name"],
+      },
+      image: {
+        fields: ["url", "alternativeText"],
+      },
+      audio: {
+        fields: ["url", "alternativeText"],
+      },
+    },
+    filters: {
+      $or: [
+        { title: { $containsi: queryString } },
+        {
+          artist: {
+            name: {
+              $containsi: queryString,
+            },
+          },
+        },
+      ],
+    },
+    pagination: {
+      pageSize: PAGE_SIZE,
+      page: page,
     },
   });
   return data;

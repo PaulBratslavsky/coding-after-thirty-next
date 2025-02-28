@@ -5,5 +5,5 @@ const BASE_API_URL = getStrapiURL() + "/api";
 const sdk = strapi({ baseURL: BASE_API_URL });
 
 const BLOG_API_URL = process.env.BLOG_API_URL;
-const blogSdk = strapi({ baseURL: BLOG_API_URL + "/api" });
-export { sdk,blogSdk };
+const resourcesSdk = strapi({ baseURL: BLOG_API_URL + "/api" });
+export { sdk, resourcesSdk };
