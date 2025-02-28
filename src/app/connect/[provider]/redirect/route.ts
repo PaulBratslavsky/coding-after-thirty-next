@@ -27,14 +27,18 @@ export async function GET(
   const backendUrl = getStrapiURL();
   const path = `/api/auth/${provider}/callback`;
 
+  console.log("*****************", backendUrl + path, "*****************");
+
   const url = new URL(backendUrl + path);
   url.searchParams.append("access_token", token);
 
   const res = await fetch(url.href);
   const data = await res.json();
 
+  console.log("*****************", data, "*****************");
+
   const cookieStore = await cookies();
   cookieStore.set("jwt", data.jwt, config);
 
-  return NextResponse.redirect(new URL("/", request.url));
+  return NextResponse.redirect(new URL("/dashboard", request.url));
 }
