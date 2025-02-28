@@ -7,6 +7,15 @@ import { CarouselItem } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StrapiImage } from "@/components/custom/strapi-image";
+import { AuthButton } from "./auth/auth-button";
+
+export interface StrapiUserProps{
+  id: number;
+  documentId: string;
+  username: string;
+  email: string;
+}
+
 
 export interface CourseProps {
   id: number;
@@ -20,9 +29,11 @@ export interface CourseProps {
 }
 
 export function CourseItem({
-  course,
+  course, 
+  user,
 }: {
   readonly course: CourseProps;
+  readonly user: StrapiUserProps;
 }) {
   const { documentId, title, description, slug, createdAt, image } = course;
   return (
@@ -57,9 +68,15 @@ export function CourseItem({
               </p>
             </div>
             <div className="flex items-center justify-between w-full">
-              <Button asChild>
-                <Link href={"/dashboard/" + slug}>View Course</Link>
-              </Button>   
+              {user ? (
+                <Button asChild>
+                  <Link href={"/dashboard/" + slug}>View Course</Link>
+                </Button>
+              ) : (
+                <Button asChild>
+                  <AuthButton />
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>

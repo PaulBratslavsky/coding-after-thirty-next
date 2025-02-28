@@ -2,6 +2,8 @@ import type { ImageProps } from "@/types";
 import { notFound } from "next/navigation";
 
 import { getAllCourses } from "@/data/loaders";
+import { getUserMeLoader } from "@/lib/services/user"
+
 
 import {
   Carousel,
@@ -29,16 +31,19 @@ export interface CourseData {
 
 async function loader() {
   const data = await getAllCourses();
+  const user = await getUserMeLoader();
+  
   if (!data?.data) notFound();
 
   return {
     headerData: { ...mockData },
     courseData: data.data,
+    user: user?.data,
   };
 }
 
 export default async function CoursesRoute() {
-  const { headerData, courseData } = await loader();
+  const { headerData, courseData, user } = await loader();
 
   return (
     <SectionLayout {...headerData}>
@@ -48,7 +53,7 @@ export default async function CoursesRoute() {
       >
         <CarouselPrevious className="-left-6 size-7 xl:-left-12 xl:size-8" />
         <CarouselContent className="pb-4">
-          {courseData.map((course) => <CourseItem course={course as CourseData} key={course.documentId} />)}
+          {courseData.map((course) => <CourseItem course={course as CourseData} key={course.documentId} user={user} />)}
         </CarouselContent>
         <CarouselNext className="-right-6 size-7 xl:-right-12 xl:size-8" />
       </Carousel>
