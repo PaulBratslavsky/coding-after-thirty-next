@@ -1,8 +1,4 @@
 {
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/connect/[provider]/redirect/route": "app/connect/[provider]/redirect/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/courses/page": "app/courses/page.js",
   "/page": "app/page.js",
-  "/dashboard/[courseSlug]/page": "app/dashboard/[courseSlug]/page.js"
+  "/courses/page": "app/courses/page.js"
 }

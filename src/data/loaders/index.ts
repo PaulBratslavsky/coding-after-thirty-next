@@ -71,13 +71,15 @@ export async function getCourseBySlug(slug: string) {
       },
     },
   });
-  console.log(data, "why is this not working");
   return data;
 }
 
 export async function getLessonBySlug(slug: string) {
   const data = await sdk.collection("lessons").find({
-    filters: { slug },
+    filters: {
+      slug: slug,
+    },
+    populate: "*",
   });
   return data;
 }
