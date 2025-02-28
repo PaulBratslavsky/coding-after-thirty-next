@@ -9,7 +9,7 @@ export function SectionLayout(data: Readonly<SectionLayoutProps>) {
   if (!data) return null;
   const { subHeading, heading, text, children } = data;
   return (
-    <section className="container h-full flex flex-col items-center gap-6 py-20 sm:gap-7">
+    <section className="container mx-auto h-full flex flex-col items-center gap-6 py-20 sm:gap-7">
       <div className="flex flex-col gap-3">
         <span className="font-bold uppercase text-primary text-center">
           {subHeading}

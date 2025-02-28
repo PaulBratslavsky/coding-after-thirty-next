@@ -21,7 +21,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
   const headerData = await loader();
   const { logoText, navItems, cta, showSignUp } = headerData;
   return (
-    <header className="flex items-center justify-between gap-10 py-4 container">
+    <header className="flex items-center justify-between gap-10 py-4 container mx-auto">
       <Link href={logoText.href} className="flex items-center gap-3">
         <svg fill="none" viewBox="0 0 238 238" className="size-6 text-primary">
           <path

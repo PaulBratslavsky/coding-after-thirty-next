@@ -13,5 +13,5 @@ async function loader() {
 export default async function HomeRoute() {
   const data = await loader();
   const blocks = data.blocks;
-  return <BlockRenderer blocks={blocks} />;
+  return <div className="container mx-auto"><BlockRenderer blocks={blocks} /></div>;
 }
