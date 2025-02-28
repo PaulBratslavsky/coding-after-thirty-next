@@ -59,3 +59,25 @@ export async function getAllCourses() {
   });
   return data;
 }
+
+export async function getCourseBySlug(slug: string) {
+  const data = await sdk.collection("courses").find({
+    filters: {
+      slug: slug,
+    },
+    populate: {
+      lessons: {
+        fields: ["slug", "title", "description", "documentId"],
+      },
+    },
+  });
+  console.log(data, "why is this not working");
+  return data;
+}
+
+export async function getLessonBySlug(slug: string) {
+  const data = await sdk.collection("lessons").find({
+    filters: { slug },
+  });
+  return data;
+}
