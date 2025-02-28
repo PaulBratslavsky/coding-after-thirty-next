@@ -18,3 +18,4 @@ export interface HeaderProps {
   cta: LinkProps;
   showSignUp: boolean;
 }
+

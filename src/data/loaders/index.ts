@@ -48,3 +48,14 @@ export async function getGlobalData() {
   });
   return data;
 }
+
+export async function getAllCourses() {
+  const data = await sdk.collection("courses").find({
+    populate: {
+      image: {
+        fields: ["url", "alternativeText", "formats"],
+      },
+    },
+  });
+  return data;
+}
