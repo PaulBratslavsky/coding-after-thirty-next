@@ -1,1 +1,17 @@
-{"node":{"602f906d785acf5196866bcc6b8c8fab7bc2358e95":{"workers":{"app/topics/page":{"moduleId":"1287","async":false}},"layer":{"app/topics/page":"action-browser"}}},"edge":{},"encryptionKey":"SvJEBiGq0X3z/flaft2OmSmObGRw9nQg8P8fpJb+1v8="}
+{
+  "node": {
+    "602f906d785acf5196866bcc6b8c8fab7bc2358e95": {
+      "workers": {
+        "app/topics/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fpaul%2Fprojects%2Flms-next%2Fsrc%2Fdata%2Factions%2Findex.ts%22%2C%5B%7B%22id%22%3A%22602f906d785acf5196866bcc6b8c8fab7bc2358e95%22%2C%22exportedName%22%3A%22addTopic%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/topics/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "SvJEBiGq0X3z/flaft2OmSmObGRw9nQg8P8fpJb+1v8="
+}
