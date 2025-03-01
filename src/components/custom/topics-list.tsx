@@ -1,7 +1,7 @@
 "use client"
 import { formatDate } from "@/lib/utils"
-import { useState, useActionState } from "react"
-
+import { useState, useActionState, useEffect } from "react"
+import { AuthButton } from "@/components/custom/auth/auth-button"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -36,16 +36,23 @@ interface TopicProps {
   publishedAt: string
 }
 
+interface UserProps {
+  id: number
+  username: string
+  email: string
+}
+
 interface FormState {
-  message: string;
+  message: string
   errors: {
-    title?: string[];
-    description?: string[];
-    type?: string[];
-  };
-  title: string;
-  description: string;
-  type: "TOPIC" | "QUESTION";
+    title?: string[]
+    description?: string[]
+    type?: string[]
+  }
+  title: string
+  description: string
+  type: "TOPIC" | "QUESTION"
+  documentId: string
 }
 
 // Add Topic Form Component
@@ -56,8 +63,15 @@ function AddTopicForm({ onClose }: { onClose: () => void }) {
     title: "",
     description: "",
     type: "TOPIC",
+    documentId: "",
   }
   const [state, formAction, isPending] = useActionState(addTopic, initialState)
+
+  useEffect(() => {
+    if (state.documentId) {
+      onClose() // Close the dialog if documentId is present
+    }
+  }, [state.documentId, onClose])
 
   return (
     <form action={formAction}>
@@ -115,7 +129,7 @@ function AddTopicForm({ onClose }: { onClose: () => void }) {
   )
 }
 
-export function TopicsList({ data }: { data: TopicProps[] }) {
+export function TopicsList({ data, user }: { data: TopicProps[], user: UserProps | null }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -124,10 +138,18 @@ export function TopicsList({ data }: { data: TopicProps[] }) {
         <h2 className="text-xl font-bold">Topics</h2>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Topic
-            </Button>
+            {user 
+              ? (
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Topic
+              </Button>
+                ) 
+              :
+                (
+                  <AuthButton label="Login to add topic" />
+                )}
+
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
@@ -139,7 +161,7 @@ export function TopicsList({ data }: { data: TopicProps[] }) {
         </Dialog>
       </div>
 
-      <h1 className="text-sm text-gray-500 mb-4">Note: Form and upvote is not working yet, work in progress.</h1>
+      <h1 className="text-sm text-gray-500 mb-4">Note: I am working on the upvote and form, work in progress. May have some bugs.</h1>
 
       <Table className="my-6">
         <TableHeader>
@@ -149,7 +171,7 @@ export function TopicsList({ data }: { data: TopicProps[] }) {
             <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Upvotes</TableHead>
-            <TableHead>Action</TableHead>
+            {user && <TableHead>Action</TableHead>} 
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -168,25 +190,32 @@ export function TopicsList({ data }: { data: TopicProps[] }) {
                   </HoverCardTrigger>
                   <HoverCardContent className="w-3/4 rounded shadow-md text-wrap">
                     <p className="text-sm my-6">{topic.description}</p>
-                    <form>
-                      <Button variant="outline" size="sm" type="submit" disabled>
-                        <ThumbsUp className="mr-2 h-4 w-4" />
-                        Upvote
-                      </Button>
-                    </form>
+                    
+                    {user ? (
+                      <form>
+                        <Button variant="outline" size="sm" type="submit" disabled>
+                          <ThumbsUp className="mr-2 h-4 w-4" />
+                          Upvote
+                        </Button>
+                      </form>
+                    ) : (
+                      <AuthButton />
+                    )}
                   </HoverCardContent>
                 </HoverCard>
               </TableCell>
               <TableCell>{formatDate(topic.createdAt)}</TableCell>
               <TableCell>{topic.upvotes}</TableCell>
-              <TableCell>
-                <form>
-                  <Button variant="outline" size="sm" type="submit" disabled>
-                    <ThumbsUp className="mr-2 h-4 w-4" />
+              {user && (
+                <TableCell>
+                  <form>
+                    <Button variant="outline" size="sm" type="submit" disabled>
+                      <ThumbsUp className="mr-2 h-4 w-4" />
                     Upvote
                   </Button>
                 </form>
               </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

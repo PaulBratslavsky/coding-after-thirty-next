@@ -1,5 +1,7 @@
 "use server"
 
+import { authenticatedSdk } from "@/lib/sdk"
+
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
@@ -26,6 +28,7 @@ type FormState = {
   title: string
   description: string
   type: string
+  documentId?: string
 }
 
 // Make sure the server action matches the expected signature for useActionState
@@ -56,20 +59,24 @@ export async function addTopic(state: FormState, formData: FormData): Promise<Fo
   // Validation succeeded, extract the validated data
   const validatedData = validatedFields.data
 
-  // Add your database logic here to save the new topic
-  // For example:
-  // await db.topics.create({
-  //   data: {
-  //     title: validatedData.title,
-  //     description: validatedData.description,
-  //     type: validatedData.type,
-  //     upvotes: 0,
-  //     documentId: crypto.randomUUID(),
-  //     createdAt: new Date().toISOString(),
-  //     updatedAt: new Date().toISOString(),
-  //     publishedAt: new Date().toISOString(),
-  //   },
-  // });
+  const newTopic = await authenticatedSdk.collection("topics").create({
+      title: validatedData.title,
+      description: validatedData.description,
+      type: validatedData.type,
+  })
+
+  if (!newTopic) {
+    return {
+      message: "There was a problem with your submission",
+      errors: {
+        title: ["There was a problem with your submission"],
+        description: ["There was a problem with your submission"],
+        type: ["There was a problem with your submission"],
+      },
+      ...validatedData,
+    }
+  }
+
 
   // Revalidate the path to refresh the data
   revalidatePath("/topics")
@@ -81,6 +88,7 @@ export async function addTopic(state: FormState, formData: FormData): Promise<Fo
     title: validatedData.title,
     description: validatedData.description,
     type: validatedData.type,
+    documentId: newTopic.data.documentId
   }
 }
 

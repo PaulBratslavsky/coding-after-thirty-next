@@ -1,4 +1,4 @@
-import { resourcesSdk, sdk } from "@/lib/sdk";
+import { authenticatedSdk, resourcesSdk, sdk } from "@/lib/sdk";
 const PAGE_SIZE = 6;
 
 export async function getHomePage() {
@@ -111,6 +111,8 @@ export async function getBlogPosts(
     //   ...(category && { category: { text: { $eq: category } } }),
     // },
 
+    sort: ['createdAt:desc'],
+
     filters: {
       title: { $containsi: queryString },
       ...(category && { category: { text: { $eq: category } } }),
@@ -173,12 +175,12 @@ export async function getAllSongs(page: number, queryString: string) {
 }
 
 export async function getAllTopics() {
-  const data = await sdk.collection("topics").find({
-
-    // sort: { createdAt: "desc" },
+  const data = await authenticatedSdk.collection("topics").find({
     populate: {
       populate: "*",
     },
+    sort: ['createdAt:desc'],
+
     // filters: {
     //   $or: [
     //     { title: { $containsi: query } },
