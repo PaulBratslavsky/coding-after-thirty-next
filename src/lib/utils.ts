@@ -6,11 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getStrapiURL() {
-  const url = process.env.NEXT_PUBLIC_STRAPI_API_URL ?? process.env.STRAPI_API_URL ?? "http://localhost:1337";
-  if (!url) {
-    console.warn("Strapi API URL is not defined. Using default: http://localhost:1337");
-  }
-  return url;
+  return process.env.NEXT_PUBLIC_STRAPI_API_URL ?? "http://localhost:1337";
 }
 
 export function getStrapiMedia(url: string | null) {
