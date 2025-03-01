@@ -75,7 +75,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
         </div>
       </div>
       <MobileNavbar>
-        <div className="rounded-b-lg bg-background py-4 container text-foreground shadow-xl absolute top-0 left-0 right-0">
+        <div className="rounded-b-lg bg-background p-4 container text-foreground shadow-xl absolute top-0 left-0 right-0">
           <nav className="flex flex-col gap-1 pt-2">
             {navItems ? (
               navItems.map((navItem: LinkProps) => (
