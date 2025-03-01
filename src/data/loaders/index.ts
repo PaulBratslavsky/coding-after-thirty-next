@@ -171,3 +171,22 @@ export async function getAllSongs(page: number, queryString: string) {
   });
   return data;
 }
+
+export async function getAllTopics() {
+  const data = await sdk.collection("topics").find({
+
+    // sort: { createdAt: "desc" },
+    populate: {
+      populate: "*",
+    },
+    // filters: {
+    //   $or: [
+    //     { title: { $containsi: query } },
+    //     { description: { $containsi: query } },
+    //   ],
+    // },
+
+  });
+  console.log(data);
+  return data;
+}
