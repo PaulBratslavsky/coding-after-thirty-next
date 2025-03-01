@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getStrapiURL } from "@/lib/utils";
 
 export function AuthButton({ label }: { label?: string }) {
-  const backendUrl = getStrapiURL();
+  const backendUrl = getStrapiURL() || process.env.NEXT_PUBLIC_STRAPI_API_URL;
   const path = "/api/connect/github";
   const url = new URL(backendUrl + path);
 
