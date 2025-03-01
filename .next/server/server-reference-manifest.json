@@ -1,5 +1,1 @@
-{
-  "node": {},
-  "edge": {},
-  "encryptionKey": "SvJEBiGq0X3z/flaft2OmSmObGRw9nQg8P8fpJb+1v8="
-}
+{"node":{"602f906d785acf5196866bcc6b8c8fab7bc2358e95":{"workers":{"app/topics/page":{"moduleId":"18108","async":false}},"layer":{"app/topics/page":"action-browser"}}},"edge":{},"encryptionKey":"SvJEBiGq0X3z/flaft2OmSmObGRw9nQg8P8fpJb+1v8="}
