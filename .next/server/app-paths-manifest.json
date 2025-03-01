@@ -1,14 +1,14 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/api/logout/route": "app/api/logout/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/connect/[provider]/redirect/route": "app/connect/[provider]/redirect/route.js",
-  "/blog/[slug]/page": "app/blog/[slug]/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/blog/page": "app/blog/page.js",
+  "/blog/[slug]/page": "app/blog/[slug]/page.js",
   "/page": "app/page.js",
-  "/songs/page": "app/songs/page.js",
   "/courses/page": "app/courses/page.js",
   "/topics/page": "app/topics/page.js",
-  "/dashboard/[courseSlug]/[lessonSlug]/page": "app/dashboard/[courseSlug]/[lessonSlug]/page.js",
-  "/dashboard/[courseSlug]/page": "app/dashboard/[courseSlug]/page.js"
+  "/songs/page": "app/songs/page.js",
+  "/dashboard/[courseSlug]/page": "app/dashboard/[courseSlug]/page.js",
+  "/dashboard/[courseSlug]/[lessonSlug]/page": "app/dashboard/[courseSlug]/[lessonSlug]/page.js"
 }
