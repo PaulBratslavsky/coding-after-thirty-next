@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getStrapiURL } from "@/lib/utils";
 
-export function AuthButton() {
+export function AuthButton({ label }: { label?: string }) {
   const backendUrl = getStrapiURL();
   const path = "/api/connect/github";
   const url = new URL(backendUrl + path);
@@ -30,7 +30,7 @@ export function AuthButton() {
             />
           </svg>
           <span className="text-white text-sm font-semibold leading-6">
-            Sign In
+            {label ?? "Sign In"}
           </span>
         </Link>
       </Button>
