@@ -1,7 +1,6 @@
 "use client"
 import { formatDate } from "@/lib/utils"
 import { useState, useActionState, useEffect } from "react"
-import { AuthButton } from "@/components/custom/auth/auth-button"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -15,6 +14,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+
+import { AuthButton } from "@/components/custom/auth/auth-button"
+
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"

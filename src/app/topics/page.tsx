@@ -30,8 +30,6 @@ async function loader() {
 
 export default async function TopicsPage() {
   const {data, user} = await loader();
-
-  console.log(user, "user");
   return (
     <div className="container mx-auto px-4 py-8">
       <TopicsList data={data as TopicProps[]} user={user} />
