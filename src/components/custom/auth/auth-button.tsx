@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export function AuthButton({ label }: { label?: string }) {
-
+  // hello
   const backendUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL
   const path = "/api/connect/github"
   const url = new URL(path, backendUrl)
