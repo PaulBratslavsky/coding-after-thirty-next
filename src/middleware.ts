@@ -10,12 +10,12 @@ const protectedRoutes: string[] = [
 
 // Helper function to check if a path is protected
 function isProtectedRoute(path: string): boolean {
-  if (!path || protectedRoutes.length === 0) return false;
+  if (!path || protectedRoutes.length === 0) return false
   return protectedRoutes.some((route) => {
     // For exact matches
     if (!route.includes("*")) {
       return path === route
-    }   
+    }
 
     // For wildcard routes (e.g., /dashboard/*)
     const basePath = route.replace("/*", "")
@@ -30,7 +30,21 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute(currentPath) && user.ok === false) {
     const redirectUrl = new URL("/", request.url)
     redirectUrl.searchParams.set("redirect", currentPath)
-    return NextResponse.redirect(redirectUrl)
+
+    // Create the redirect response
+    const response = NextResponse.redirect(redirectUrl)
+
+    // Set the cookie on the response object, not the request
+    response.cookies.set({
+      name: "redirectUrl",
+      value: currentPath,
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24, // 1 day in seconds
+    })
+
+    return response
   }
 
   return NextResponse.next()
@@ -52,5 +66,4 @@ export const config = {
     "/dashboard/:path*",
   ],
 }
-
 
