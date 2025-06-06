@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 
+
 import { MarkdownText } from "@/components/custom/markdown-text";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MediaPlayer } from "@/components/custom/media-player";
@@ -10,28 +11,33 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { getLessonBySlug } from "@/data/loaders";
+import { getLessonBySlug } from "@/data-utils/loaders";
 
 interface ParamsProps {
   courseSlug: string;
   lessonSlug: string;
 }
 
-interface LessonData {
-  title: string;
-  description: string;
-  content: string;
-  resources: string;
-  player: { videoId: string; timecode: number }[];
-  documentId: string;
-}
+// interface LessonData {
+//   title: string;
+//   description: string;
+//   content: string;
+//   resources: string;
+//   player: { videoId: string; timecode: number }[];
+//   documentId: string;
+// }
 
 
 async function loader(slug: string) {
-  const data = await getLessonBySlug(slug);
-  const lessonData = data.data[0];
-  if (!lessonData) notFound();
-  return lessonData;
+  try {
+    const data = await getLessonBySlug(slug);
+    const lessonData = data.data[0];
+    if (!lessonData) notFound();
+    return lessonData;
+  } catch (error) {
+    console.error("Failed to load lesson:", error);
+    throw error;
+  }
 }
 
 export default async function LessonRoute({

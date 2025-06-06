@@ -10,6 +10,7 @@ export interface ImageProps {
   documentId: string;
   url: string;
   alternativeText: string | null;
+  name: string;
 }
 
 export interface HeaderProps {

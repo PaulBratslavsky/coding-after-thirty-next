@@ -1,4 +1,4 @@
-import { getCourseBySlug } from "@/data/loaders";
+import { getCourseBySlug } from "@/data-utils/loaders";
 import { notFound } from "next/navigation";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,10 +12,15 @@ import {
 } from "@/components/ui/resizable";
 
 async function loader(slug: string) {
+  try { 
   const data = await getCourseBySlug(slug);
   const courseData = data?.data[0];
   if (!courseData) notFound();
   return courseData;
+} catch (error) {
+  console.error("Failed to load course:", error);
+  throw error;
+}
 }
 
 interface LessonListProps {
@@ -40,8 +45,11 @@ export default async function DashboardRoute({
   const resolvedParams = await params;  
   const courseSlug = resolvedParams.courseSlug;
 
+  console.log("courseSlug", courseSlug);
+
   const data = await loader(courseSlug);
-  const courseList = data.lessons;
+  const courseList = data?.lessons;
+
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -51,7 +59,7 @@ export default async function DashboardRoute({
           <ScrollArea className="h-[calc(100vh-72px)] w-full p-4">
             <h2 className="text-xl font-bold mb-4">Lessons</h2>
             <div className="space-y-2">
-              {courseList.map((lesson: LessonListProps, index: number) => <LessonLink lesson={lesson} index={index} key={index} />  )}
+              {courseList ? courseList.map((lesson: LessonListProps, index: number) => <LessonLink lesson={lesson} index={index} key={index} />  ) : <div>No lessons found</div>}
             </div>
           </ScrollArea>
           <Separator />

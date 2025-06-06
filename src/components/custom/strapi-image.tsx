@@ -10,13 +10,12 @@ interface StrapiImageProps {
   priority?: boolean;
 }
 
-const STRAPI_API_URL = process.env.STRAPI_API_URL ?? "http://localhost:1337";
-
 export function getStrapiMedia(url: string | null) {
+  const strapiURL = process.env.STRAPI_API_URL ?? "http://localhost:1337";
   if (url == null) return null;
   if (url.startsWith("data:")) return url;
   if (url.startsWith("http") || url.startsWith("//")) return url;
-  return `${STRAPI_API_URL}${url}`;
+  return `${strapiURL}${url}`;
 }
 
 export function StrapiImage({
