@@ -16,47 +16,64 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const url = new URL(backendUrl + path)
   url.searchParams.append("access_token", token)
 
+  // Add detailed logging for debugging
+  console.log("=== AUTH CALLBACK DEBUG ===")
+  console.log("Provider:", provider)
+  console.log("Backend URL:", backendUrl)
+  console.log("Full callback URL:", url.href)
+  console.log("Access token (first 10 chars):", token.substring(0, 10) + "...")
+  console.log("Environment:", process.env.NODE_ENV)
+  console.log("Request hostname:", new URL(request.url).hostname)
+
   try {
-    const res = await fetch(url.href)
+    const res = await fetch(url.href, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        // Add User-Agent for some providers that require it
+        "User-Agent": "NextJS-App/1.0",
+      },
+    })
+
+    console.log("Strapi response status:", res.status)
+    console.log("Strapi response headers:", Object.fromEntries(res.headers.entries()))
 
     if (!res.ok) {
-      throw new Error(`Authentication failed: ${res.status}`)
+      const errorText = await res.text()
+      console.error("Strapi error response:", errorText)
+      throw new Error(`Authentication failed: ${res.status} - ${errorText}`)
     }
 
     const data = await res.json()
+    console.log("Strapi response data keys:", Object.keys(data))
 
     if (!data.jwt) {
+      console.error("No JWT in response:", data)
       throw new Error("No JWT token received")
     }
 
     const cookieStore = await cookies()
     const requestUrl = new URL(request.url)
-
-    // Simplified domain logic for your specific case
     const hostname = requestUrl.hostname
-    console.log("Current hostname:", hostname)
 
+    // Fix domain logic
     let domain: string | undefined
 
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-      // For local development, don't set domain
       domain = undefined
-    } else if (hostname === "www.codingafterthirty.com") {
-      // For your production site, use the exact hostname without leading dot
-      domain = "www.codingafterthirty.com"
     } else if (hostname.includes("vercel.app")) {
-      // For Vercel deployments
       domain = hostname
     } else {
-      // Fallback to current hostname
-      domain = hostname
+      // For custom domains, use root domain with leading dot
+      const rootDomain = hostname.replace(/^www\./, "")
+      domain = `.${rootDomain}`
     }
 
     console.log("Setting cookie with domain:", domain)
 
-    // Set the JWT cookie with proper configuration
     cookieStore.set("jwt", data.jwt, {
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 60 * 24 * 7,
       path: "/",
       domain: domain,
       httpOnly: true,
@@ -64,7 +81,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       sameSite: "lax" as const,
     })
 
-    // Optional: Set additional cookies for user info
     if (data.user) {
       cookieStore.set(
         "user",
@@ -84,9 +100,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       )
     }
 
+    console.log("=== AUTH SUCCESS ===")
     return NextResponse.redirect(new URL("/courses", request.url))
   } catch (error) {
     console.error("Authentication callback error:", error)
-    return NextResponse.redirect(new URL("/?error=auth_failed", request.url))
+    // Redirect with error details for debugging
+    const errorUrl = new URL("/", request.url)
+    errorUrl.searchParams.set("error", "auth_failed")
+    errorUrl.searchParams.set("provider", provider)
+    return NextResponse.redirect(errorUrl)
   }
 }
