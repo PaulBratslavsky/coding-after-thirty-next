@@ -1,136 +1,40 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { getStrapiURL } from "@/lib/utils"
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { getStrapiURL } from "@/lib/utils";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
-  const resolvedParams = await params
-  const { searchParams } = new URL(request.url)
-  const token = searchParams.get("access_token")
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ [key: string]: string }> }
+) {
+  const resolvedParams = await params;
+  const { searchParams } = new URL(request.url);
+  const token = searchParams.get("access_token");
 
-  console.log("Token:", token)
+  if (!token) return NextResponse.redirect(new URL("/", request.url));
 
-  console.log("=== AUTH CALLBACK START ===")
-  console.log("Full URL:", request.url)
-  console.log("Search params:", Object.fromEntries(searchParams.entries()))
-  console.log("Provider:", resolvedParams.provider)
+  const provider = resolvedParams.provider;
+  const backendUrl = getStrapiURL();
+  const path = `/api/auth/${provider}/callback`;
 
-  if (!token) {
-    console.log("No access token found")
-    return NextResponse.redirect(new URL("/?error=no_token", request.url))
-  }
+  const url = new URL(backendUrl + path);
+  url.searchParams.append("access_token", token);
 
-  const provider = resolvedParams.provider
-  const backendUrl = getStrapiURL()
-  const path = `/api/auth/${provider}/callback`
-  const url = new URL(backendUrl + path)
-  url.searchParams.append("access_token", token)
+  const res = await fetch(url.href);
+  const data = await res.json();
 
-  console.log("Calling Strapi URL:", url.href)
+  const cookieStore = await cookies();
+  const requestUrl = new URL(request.url);
+  const hostname = requestUrl.hostname;
+  const isLocalhost = hostname === 'localhost';
 
-  try {
-    const res = await fetch(url.href, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "User-Agent": "NextJS-LMS/1.0",
-      },
-    })
+  cookieStore.set("jwt", data.jwt, {
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: "/",
+    domain: process.env.HOST ?? "localhost",
+    httpOnly: true,
+    secure: !isLocalhost,
+    sameSite: "lax"
+  });
 
-    console.log("Strapi response status:", res.status)
-    console.log("Strapi response headers:", Object.fromEntries(res.headers.entries()))
-
-    // Get response text first to log it
-    const responseText = await res.text()
-    console.log("Strapi raw response:", responseText)
-
-    if (!res.ok) {
-      console.error("Strapi error - Status:", res.status)
-      console.error("Strapi error - Response:", responseText)
-
-      // Try to parse as JSON for better error details
-      let errorDetails = responseText
-      try {
-        const errorJson = JSON.parse(responseText)
-        errorDetails = JSON.stringify(errorJson, null, 2)
-      } catch (error) {
-        console.error("Failed to parse Strapi response as JSON:", error)
-        // Keep as text if not JSON
-      }
-
-      return NextResponse.redirect(
-        new URL(`/?error=strapi_error&status=${res.status}&details=${encodeURIComponent(errorDetails)}`, request.url),
-      )
-    }
-
-    // Parse the response
-    let data
-    try {
-      data = JSON.parse(responseText)
-    } catch (e) {
-      console.error("Failed to parse Strapi response as JSON:", e)
-      return NextResponse.redirect(new URL("/?error=invalid_json", request.url))
-    }
-
-    console.log("Parsed Strapi data:", data)
-
-    if (!data.jwt) {
-      console.error("No JWT in response. Available keys:", Object.keys(data))
-      return NextResponse.redirect(new URL("/?error=no_jwt", request.url))
-    }
-
-    // Set cookies
-    const cookieStore = await cookies()
-    const requestUrl = new URL(request.url)
-    const hostname = requestUrl.hostname
-
-    let domain: string | undefined
-    if (hostname === "localhost" || hostname === "127.0.0.1") {
-      domain = undefined
-    } else if (hostname.includes("vercel.app")) {
-      domain = hostname
-    } else {
-      const rootDomain = hostname.replace(/^www\./, "")
-      domain = `.${rootDomain}`
-    }
-
-    console.log("Setting cookie with domain:", domain)
-
-    cookieStore.set("jwt", data.jwt, {
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-      domain: domain,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax" as const,
-    })
-
-    if (data.user) {
-      cookieStore.set(
-        "user",
-        JSON.stringify({
-          id: data.user.id,
-          email: data.user.email,
-          username: data.user.username,
-        }),
-        {
-          maxAge: 60 * 60 * 24 * 7,
-          path: "/",
-          domain: domain,
-          httpOnly: false,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax" as const,
-        },
-      )
-    }
-
-    console.log("=== AUTH SUCCESS ===")
-    return NextResponse.redirect(new URL("/courses", request.url))
-  } catch (error: unknown) {
-    console.error("Authentication callback error:", error)
-    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
-    return NextResponse.redirect(
-      new URL(`/?error=callback_error&message=${encodeURIComponent(errorMessage)}`, request.url),
-    )
-  }
+  return NextResponse.redirect(new URL("/courses", request.url));
 }
