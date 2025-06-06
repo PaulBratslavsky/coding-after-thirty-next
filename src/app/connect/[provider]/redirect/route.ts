@@ -32,22 +32,24 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const cookieStore = await cookies()
     const requestUrl = new URL(request.url)
 
-    // Determine environment and domain settings
-    const isProduction = process.env.NODE_ENV === "production"
-    const isVercel = process.env.VERCEL === "1"
+    // Simplified domain logic for your specific case
+    const hostname = requestUrl.hostname
+    console.log("Current hostname:", hostname)
 
-    // Set domain based on environment
     let domain: string | undefined
 
-    if (isProduction && isVercel) {
-      // Use Vercel's automatic URL or your custom domain
-      domain = process.env.VERCEL_URL || requestUrl.hostname
-    } else if (requestUrl.hostname === "localhost") {
-      // For localhost, don't set domain
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      // For local development, don't set domain
       domain = undefined
+    } else if (hostname === "www.codingafterthirty.com") {
+      // For your production site, use the exact hostname without leading dot
+      domain = "www.codingafterthirty.com"
+    } else if (hostname.includes("vercel.app")) {
+      // For Vercel deployments
+      domain = hostname
     } else {
-      // For preview deployments, use current hostname
-      domain = requestUrl.hostname
+      // Fallback to current hostname
+      domain = hostname
     }
 
     console.log("Setting cookie with domain:", domain)
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       path: "/",
       domain: domain,
       httpOnly: true,
-      secure: isProduction, // Only secure in production
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax" as const,
     })
 
@@ -75,8 +77,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           maxAge: 60 * 60 * 24 * 7,
           path: "/",
           domain: domain,
-          httpOnly: false, // Allow client-side access for user info
-          secure: isProduction,
+          httpOnly: false,
+          secure: process.env.NODE_ENV === "production",
           sameSite: "lax" as const,
         },
       )
