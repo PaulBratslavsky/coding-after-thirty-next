@@ -2,14 +2,6 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getStrapiURL } from "@/lib/utils";
 
-const config = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
-  path: "/",
-  domain: process.env.HOST ?? "localhost",
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-};
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ [key: string]: string }> }
@@ -31,7 +23,14 @@ export async function GET(
   const data = await res.json();
 
   const cookieStore = await cookies();
-  cookieStore.set("jwt", data.jwt, config);
+  cookieStore.set("jwt", data.jwt, {
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: "/",
+    domain: new URL(request.url).hostname,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax"
+  });
 
   return NextResponse.redirect(new URL("/courses", request.url));
 }
