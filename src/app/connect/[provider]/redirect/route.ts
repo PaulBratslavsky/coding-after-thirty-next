@@ -84,17 +84,18 @@ export async function GET(
           data: userData
         });
 
-        const existingUsers = userData.data || [];
-        if (!existingUsers.length) {
+        // Check if we have any users in the response
+        if (!userData.data || !Array.isArray(userData.data) || userData.data.length === 0) {
           console.error("[Auth] No existing user found for email:", githubUser.email);
           return NextResponse.redirect(new URL("/", request.url));
         }
 
-        const existingUser = existingUsers[0];
+        const existingUser = userData.data[0];
         console.log("[Auth] Found existing user:", {
           id: existingUser.id,
           email: existingUser.email,
-          username: existingUser.username
+          username: existingUser.username,
+          provider: existingUser.provider
         });
 
         // Create a JWT for the existing user
