@@ -15,9 +15,6 @@ export async function GET(
   { params }: { params: Promise<{ [key: string]: string }> }
 ) {
   const resolvedParams = await params;
-
-  console.log("*****************", resolvedParams, "*****************");
-
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("access_token");
 

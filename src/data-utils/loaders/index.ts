@@ -61,7 +61,6 @@ export async function getCourseBySlug(slug: string) {
       },
     },
   });
-  console.log("da    ta", data);
   return data;
 }
 

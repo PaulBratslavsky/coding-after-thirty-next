@@ -44,9 +44,6 @@ export default async function DashboardRoute({
 }) {
   const resolvedParams = await params;  
   const courseSlug = resolvedParams.courseSlug;
-
-  console.log("courseSlug", courseSlug);
-
   const data = await loader(courseSlug);
   const courseList = data?.lessons;
 

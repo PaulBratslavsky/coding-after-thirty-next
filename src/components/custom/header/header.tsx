@@ -24,7 +24,6 @@ async function loader(): Promise<HeaderProps> {
 }
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
-  console.log("user", user);
   const headerData = await loader();
   const { logoText, navItems, cta, showSignUp, logoImage } = headerData;
 

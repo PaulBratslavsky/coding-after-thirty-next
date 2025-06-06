@@ -28,8 +28,6 @@ interface MobileNavigationProps {
 export function MobileNavigation({ headerData, user }: MobileNavigationProps) {
   const { logoText, navItems, cta, logoImage } = headerData;
   const pathname = usePathname();
-  console.log(pathname);
-  console.log(user);
 
   return (
     <Sheet>
