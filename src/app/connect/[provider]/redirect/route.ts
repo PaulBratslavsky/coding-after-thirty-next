@@ -126,10 +126,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     console.log("=== AUTH SUCCESS ===")
     return NextResponse.redirect(new URL("/courses", request.url))
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Authentication callback error:", error)
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
     return NextResponse.redirect(
-      new URL(`/?error=callback_error&message=${encodeURIComponent(error.message)}`, request.url),
+      new URL(`/?error=callback_error&message=${encodeURIComponent(errorMessage)}`, request.url),
     )
   }
 }
