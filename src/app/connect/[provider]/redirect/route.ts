@@ -125,18 +125,26 @@ export async function GET(
         }
 
         const cookieStore = await cookies();
-        const hostname = new URL(request.url).hostname;
-        const rootDomain = hostname.split('.').slice(-2).join('.');
-        console.log("[Auth] Domain info:", { hostname, rootDomain });
+        const requestUrl = new URL(request.url);
+        const hostname = requestUrl.hostname;
+        console.log("[Auth] Request URL:", requestUrl.toString());
+        console.log("[Auth] Hostname:", hostname);
 
         const cookieConfig = {
           maxAge: 60 * 60 * 24 * 7, // 1 week
           path: "/",
-          domain: rootDomain,
+          domain: hostname,
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "lax" as const
         };
+
+        console.log("[Auth] Cookie config:", {
+          domain: cookieConfig.domain,
+          secure: cookieConfig.secure,
+          sameSite: cookieConfig.sameSite,
+          jwtLength: jwtData.jwt.length
+        });
 
         cookieStore.set("jwt", jwtData.jwt, cookieConfig);
         console.log("[Auth] Cookie set for existing user");
@@ -154,14 +162,15 @@ export async function GET(
     }
 
     const cookieStore = await cookies();
-    const hostname = new URL(request.url).hostname;
-    const rootDomain = hostname.split('.').slice(-2).join('.');
-    console.log("[Auth] Domain info:", { hostname, rootDomain });
+    const requestUrl = new URL(request.url);
+    const hostname = requestUrl.hostname;
+    console.log("[Auth] Request URL:", requestUrl.toString());
+    console.log("[Auth] Hostname:", hostname);
 
     const cookieConfig = {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
-      domain: rootDomain,
+      domain: hostname,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax" as const
