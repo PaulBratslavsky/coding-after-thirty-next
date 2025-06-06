@@ -7,23 +7,23 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { searchParams } = new URL(request.url)
   const token = searchParams.get("access_token")
 
-  if (!token) return NextResponse.redirect(new URL("/", request.url))
+  console.log("=== AUTH CALLBACK START ===")
+  console.log("Full URL:", request.url)
+  console.log("Search params:", Object.fromEntries(searchParams.entries()))
+  console.log("Provider:", resolvedParams.provider)
+
+  if (!token) {
+    console.log("No access token found")
+    return NextResponse.redirect(new URL("/?error=no_token", request.url))
+  }
 
   const provider = resolvedParams.provider
   const backendUrl = getStrapiURL()
   const path = `/api/auth/${provider}/callback`
-
   const url = new URL(backendUrl + path)
   url.searchParams.append("access_token", token)
 
-  // Add detailed logging for debugging
-  console.log("=== AUTH CALLBACK DEBUG ===")
-  console.log("Provider:", provider)
-  console.log("Backend URL:", backendUrl)
-  console.log("Full callback URL:", url.href)
-  console.log("Access token (first 10 chars):", token.substring(0, 10) + "...")
-  console.log("Environment:", process.env.NODE_ENV)
-  console.log("Request hostname:", new URL(request.url).hostname)
+  console.log("Calling Strapi URL:", url.href)
 
   try {
     const res = await fetch(url.href, {
@@ -31,41 +31,63 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        // Add User-Agent for some providers that require it
-        "User-Agent": "NextJS-App/1.0",
+        "User-Agent": "NextJS-LMS/1.0",
       },
     })
 
     console.log("Strapi response status:", res.status)
     console.log("Strapi response headers:", Object.fromEntries(res.headers.entries()))
 
+    // Get response text first to log it
+    const responseText = await res.text()
+    console.log("Strapi raw response:", responseText)
+
     if (!res.ok) {
-      const errorText = await res.text()
-      console.error("Strapi error response:", errorText)
-      throw new Error(`Authentication failed: ${res.status} - ${errorText}`)
+      console.error("Strapi error - Status:", res.status)
+      console.error("Strapi error - Response:", responseText)
+
+      // Try to parse as JSON for better error details
+      let errorDetails = responseText
+      try {
+        const errorJson = JSON.parse(responseText)
+        errorDetails = JSON.stringify(errorJson, null, 2)
+      } catch (error) {
+        console.error("Failed to parse Strapi response as JSON:", error)
+        // Keep as text if not JSON
+      }
+
+      return NextResponse.redirect(
+        new URL(`/?error=strapi_error&status=${res.status}&details=${encodeURIComponent(errorDetails)}`, request.url),
+      )
     }
 
-    const data = await res.json()
-    console.log("Strapi response data keys:", Object.keys(data))
+    // Parse the response
+    let data
+    try {
+      data = JSON.parse(responseText)
+    } catch (e) {
+      console.error("Failed to parse Strapi response as JSON:", e)
+      return NextResponse.redirect(new URL("/?error=invalid_json", request.url))
+    }
+
+    console.log("Parsed Strapi data:", data)
 
     if (!data.jwt) {
-      console.error("No JWT in response:", data)
-      throw new Error("No JWT token received")
+      console.error("No JWT in response. Available keys:", Object.keys(data))
+      return NextResponse.redirect(new URL("/?error=no_jwt", request.url))
     }
 
+    // Set cookies
     const cookieStore = await cookies()
     const requestUrl = new URL(request.url)
     const hostname = requestUrl.hostname
 
-    // Fix domain logic
     let domain: string | undefined
-
     if (hostname === "localhost" || hostname === "127.0.0.1") {
       domain = undefined
     } else if (hostname.includes("vercel.app")) {
       domain = hostname
     } else {
-      // For custom domains, use root domain with leading dot
       const rootDomain = hostname.replace(/^www\./, "")
       domain = `.${rootDomain}`
     }
@@ -104,10 +126,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.redirect(new URL("/courses", request.url))
   } catch (error) {
     console.error("Authentication callback error:", error)
-    // Redirect with error details for debugging
-    const errorUrl = new URL("/", request.url)
-    errorUrl.searchParams.set("error", "auth_failed")
-    errorUrl.searchParams.set("provider", provider)
-    return NextResponse.redirect(errorUrl)
+    return NextResponse.redirect(
+      new URL(`/?error=callback_error&message=${encodeURIComponent(error.message)}`, request.url),
+    )
   }
 }
