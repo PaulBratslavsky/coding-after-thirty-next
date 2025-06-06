@@ -12,7 +12,10 @@ export async function GET(
     const token = searchParams.get("access_token");
     console.log("[Auth] Access token received:", token ? "Present" : "Missing");
 
-    if (!token) return NextResponse.redirect(new URL("/", request.url));
+    if (!token) {
+      console.error("[Auth] No access token in URL");
+      return NextResponse.redirect(new URL("/", request.url));
+    }
 
     const provider = resolvedParams.provider;
     const backendUrl = getStrapiURL();
@@ -25,9 +28,12 @@ export async function GET(
 
     const res = await fetch(url.href);
     if (!res.ok) {
+      const errorText = await res.text();
       console.error("[Auth] Backend request failed:", {
         status: res.status,
-        statusText: res.statusText
+        statusText: res.statusText,
+        error: errorText,
+        url: url.href
       });
       return NextResponse.redirect(new URL("/", request.url));
     }
