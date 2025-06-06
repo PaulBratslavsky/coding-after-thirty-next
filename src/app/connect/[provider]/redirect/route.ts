@@ -57,23 +57,44 @@ export async function GET(
           email: githubUser.email 
         });
 
-        // Try to find the existing user
-        const findUserRes = await fetch(`${backendUrl}/api/users?filters[email][$eq]=${githubUser.email}`, {
+        // Try to find the existing user with case-insensitive search
+        const searchUrl = new URL(`${backendUrl}/api/users`);
+        searchUrl.searchParams.append("filters[email][$eqi]", githubUser.email);
+        console.log("[Auth] Searching for user with URL:", searchUrl.toString());
+
+        const findUserRes = await fetch(searchUrl.toString(), {
           headers: {
             Authorization: `Bearer ${process.env.STRAPI_API_KEY}`,
           },
         });
 
         if (!findUserRes.ok) {
-          console.error("[Auth] Failed to find user:", await findUserRes.text());
+          const errorText = await findUserRes.text();
+          console.error("[Auth] Failed to find user:", {
+            status: findUserRes.status,
+            statusText: findUserRes.statusText,
+            error: errorText
+          });
           return NextResponse.redirect(new URL("/", request.url));
         }
 
-        const { data: existingUsers } = await findUserRes.json();
-        if (!existingUsers?.length) {
-          console.error("[Auth] No existing user found");
+        const userData = await findUserRes.json();
+        console.log("[Auth] User search response:", {
+          status: findUserRes.status,
+          data: userData
+        });
+
+        const existingUsers = userData.data || [];
+        if (!existingUsers.length) {
+          console.error("[Auth] No existing user found for email:", githubUser.email);
           return NextResponse.redirect(new URL("/", request.url));
         }
+
+        console.log("[Auth] Found existing user:", {
+          id: existingUsers[0].id,
+          email: existingUsers[0].attributes?.email,
+          username: existingUsers[0].attributes?.username
+        });
 
         // Create a JWT for the existing user
         const jwtRes = await fetch(`${backendUrl}/api/auth/github/callback`, {
@@ -88,7 +109,12 @@ export async function GET(
         });
 
         if (!jwtRes.ok) {
-          console.error("[Auth] Failed to get JWT for existing user:", await jwtRes.text());
+          const errorText = await jwtRes.text();
+          console.error("[Auth] Failed to get JWT for existing user:", {
+            status: jwtRes.status,
+            statusText: jwtRes.statusText,
+            error: errorText
+          });
           return NextResponse.redirect(new URL("/", request.url));
         }
 
