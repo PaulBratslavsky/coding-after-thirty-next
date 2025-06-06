@@ -134,15 +134,18 @@ export async function GET(
         const cookieStore = await cookies();
         const requestUrl = new URL(request.url);
         const hostname = requestUrl.hostname;
+        const isLocalhost = hostname === 'localhost';
         console.log("[Auth] Request URL:", requestUrl.toString());
         console.log("[Auth] Hostname:", hostname);
+        console.log("[Auth] Is localhost:", isLocalhost);
 
         const cookieConfig = {
           maxAge: 60 * 60 * 24 * 7, // 1 week
           path: "/",
-          domain: hostname,
+          // Only set domain for non-localhost environments
+          ...(isLocalhost ? {} : { domain: hostname }),
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: !isLocalhost, // Only require secure in production
           sameSite: "lax" as const
         };
 
@@ -150,7 +153,8 @@ export async function GET(
           domain: cookieConfig.domain,
           secure: cookieConfig.secure,
           sameSite: cookieConfig.sameSite,
-          jwtLength: jwtData.jwt.length
+          jwtLength: jwtData.jwt.length,
+          isLocalhost
         });
 
         cookieStore.set("jwt", jwtData.jwt, cookieConfig);
@@ -171,22 +175,27 @@ export async function GET(
     const cookieStore = await cookies();
     const requestUrl = new URL(request.url);
     const hostname = requestUrl.hostname;
+    const isLocalhost = hostname === 'localhost';
     console.log("[Auth] Request URL:", requestUrl.toString());
     console.log("[Auth] Hostname:", hostname);
+    console.log("[Auth] Is localhost:", isLocalhost);
 
     const cookieConfig = {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
-      domain: hostname,
+      // Only set domain for non-localhost environments
+      ...(isLocalhost ? {} : { domain: hostname }),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: !isLocalhost, // Only require secure in production
       sameSite: "lax" as const
     };
+
     console.log("[Auth] Cookie config:", {
       domain: cookieConfig.domain,
       secure: cookieConfig.secure,
       sameSite: cookieConfig.sameSite,
-      jwtLength: data.jwt.length
+      jwtLength: data.jwt.length,
+      isLocalhost
     });
 
     cookieStore.set("jwt", data.jwt, cookieConfig);
