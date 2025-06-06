@@ -7,6 +7,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { searchParams } = new URL(request.url)
   const token = searchParams.get("access_token")
 
+  console.log("Token:", token)
+
   console.log("=== AUTH CALLBACK START ===")
   console.log("Full URL:", request.url)
   console.log("Search params:", Object.fromEntries(searchParams.entries()))
