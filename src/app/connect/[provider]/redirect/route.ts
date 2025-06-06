@@ -90,10 +90,11 @@ export async function GET(
           return NextResponse.redirect(new URL("/", request.url));
         }
 
+        const existingUser = existingUsers[0];
         console.log("[Auth] Found existing user:", {
-          id: existingUsers[0].id,
-          email: existingUsers[0].attributes?.email,
-          username: existingUsers[0].attributes?.username
+          id: existingUser.id,
+          email: existingUser.email,
+          username: existingUser.username
         });
 
         // Create a JWT for the existing user
@@ -104,7 +105,12 @@ export async function GET(
           },
           body: JSON.stringify({
             access_token: token,
-            user: existingUsers[0],
+            user: {
+              id: existingUser.id,
+              email: existingUser.email,
+              username: existingUser.username,
+              provider: existingUser.provider
+            },
           }),
         });
 
