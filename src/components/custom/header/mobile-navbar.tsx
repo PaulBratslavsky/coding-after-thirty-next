@@ -1,7 +1,6 @@
 "use client";
 import { Hamburger } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,9 +24,8 @@ interface MobileNavigationProps {
   user: StrapiUserMeProps | null;
 }
 
-export function MobileNavigation({ headerData, user }: MobileNavigationProps) {
+export function MobileNavigation({ headerData }: MobileNavigationProps) {
   const { logoText, navItems, cta, logoImage } = headerData;
-  const pathname = usePathname();
 
   return (
     <Sheet>
@@ -66,13 +64,6 @@ export function MobileNavigation({ headerData, user }: MobileNavigationProps) {
         <div className="px-6 no-scrollbar flex h-[calc(100vh-4rem)] flex-col justify-between overflow-y-auto">
           <div>
             <NavLinkItems navLinks={navItems} isMobile />
-            {/* {user && (
-              <Button asChild variant="outline">
-              <Link href={"/dashboard"} className="cursor-pointer">
-                Dashboard
-              </Link>
-            </Button>
-            )} */}
           </div>
         </div>
         <SheetFooter className="flex flex-row gap-2">
