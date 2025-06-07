@@ -23,6 +23,10 @@ export async function GET(
   const data = await res.json();
 
   const cookieStore = await cookies();
+  const redirectUrl = cookieStore.get("redirectUrl");
+  const urlValue = redirectUrl?.value
+
+
   const requestUrl = new URL(request.url);
   const hostname = requestUrl.hostname;
   const isLocalhost = hostname === 'localhost';
@@ -36,5 +40,5 @@ export async function GET(
     sameSite: "lax"
   });
 
-  return NextResponse.redirect(new URL("/courses", request.url));
+  return NextResponse.redirect(new URL(urlValue ?? "/courses", request.url));
 }
