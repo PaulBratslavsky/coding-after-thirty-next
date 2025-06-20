@@ -9,7 +9,7 @@ export function AuthUserNavButton({ user }: Readonly<StrapiUserMeProps>) {
     <div className="hidden items-center gap-2 md:flex">
       {user?.username}
       <Button asChild className="w-8 h-8 rounded-full">
-        <Link href="/dashboard" className="cursor-pointer">
+        <Link href="/dashboard/profile" className="cursor-pointer">
           {user?.username[0].toLocaleUpperCase()}
         </Link>
       </Button>
