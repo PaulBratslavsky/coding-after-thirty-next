@@ -56,7 +56,7 @@ export default async function DashboardRoute({
           <ScrollArea className="h-[calc(100vh-72px)] w-full p-4">
             <h2 className="text-xl font-bold mb-4">Lessons</h2>
             <div className="space-y-2">
-              {courseList ? courseList.map((lesson: LessonListProps, index: number) => <LessonLink lesson={lesson} index={index} key={index} />  ) : <div>No lessons found</div>}
+              {courseList ? courseList.map((lesson: LessonListProps, index: number) => <LessonLink pathname={"/courses/" + courseSlug} lesson={lesson} index={index} key={index} />  ) : <div>No lessons found</div>}
             </div>
           </ScrollArea>
           <Separator />

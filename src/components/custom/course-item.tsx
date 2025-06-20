@@ -31,9 +31,11 @@ export interface CourseProps {
 export function CourseItem({
   course, 
   user,
+  pathname,
 }: {
   readonly course: CourseProps;
   readonly user: StrapiUserProps;
+  readonly pathname: string;
 }) {
   const { documentId, title, description, slug, createdAt, image } = course;
   return (
@@ -70,7 +72,7 @@ export function CourseItem({
             <div className="flex items-center justify-between w-full">
               {user ? (
                 <Button asChild>
-                  <Link href={"/dashboard/" + slug}>View Course</Link>
+                  <Link href={pathname + "/" + slug}>View Course</Link>
                 </Button>
               ) : (
                 <Button asChild>

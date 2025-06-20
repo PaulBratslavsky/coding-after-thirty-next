@@ -1,4 +1,4 @@
-import type { ImageProps, LinkProps } from "./base";
+import type { ImageProps, LinkProps, HeaderProps } from "./base";
 import type {
   Block,
   CardCarouselProps,
@@ -17,4 +17,5 @@ export type {
   Block,
   StrapiUserMeProps,
   ContentWithImageProps,
+  HeaderProps,
 };

@@ -60,6 +60,7 @@ export default async function CoursesRoute() {
               course={course as CourseData}
               key={course.documentId}
               user={user}
+              pathname={"/courses"}
             />
           ))}
         </CarouselContent>

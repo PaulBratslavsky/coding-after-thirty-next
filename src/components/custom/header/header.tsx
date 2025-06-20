@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { HeaderProps } from "@/app/types";
+import { HeaderProps } from "@/types";
 import { notFound } from "next/navigation";
 import { getGlobalPageData } from "@/data-utils/loaders";
 
@@ -10,7 +10,7 @@ import { StrapiUserMeProps } from "@/types";
 import { MobileNavigation } from "./mobile-navbar";
 import { NavLinkItems } from "./nav-link-items";
 import { ThemeToggle } from "../theme-toggle";
-import { StrapiImage } from "@/components/custom/strapi-image";
+// import { StrapiImage } from "@/components/custom/strapi-image";
 
 async function loader(): Promise<HeaderProps> {
   try {
@@ -25,13 +25,13 @@ async function loader(): Promise<HeaderProps> {
 
 export async function Header({ user }: Readonly<StrapiUserMeProps>) {
   const headerData = await loader();
-  const { logoText, navItems, cta, showSignUp, logoImage } = headerData;
+  const { logoText, navItems, cta, showSignUp } = headerData;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href={logoText.href} className="flex items-center gap-3">
-          {logoImage && (
+          {/* {logoImage && (
             <StrapiImage
               src={logoImage.url}
               alt={logoText.label}
@@ -39,7 +39,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
               height={26}
               className="rounded-sm dark:invert"
             />
-          )}
+          )} */}
           <span className="text-sm md:text-lg lg:text-xl font-heading font-bold text-gray-900 dark:text-white">
             {logoText.label}
           </span>
