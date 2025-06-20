@@ -10,14 +10,14 @@ interface LessonListProps {
   documentId: string;
 }
 
-export function LessonLink({lesson, index}: {lesson: LessonListProps, index: number}) {
+export function LessonLink({lesson, index, pathname}: {lesson: LessonListProps, index: number, pathname: string}) {
     const params = useParams();
   const isActive = lesson.slug.includes(params.lessonSlug as string);
     const { title, documentId } = lesson;
     return (
       <Link
         key={documentId}
-        href={"/dashboard/" + params.courseSlug + "/" + lesson.slug}
+        href={pathname + "/" + lesson.slug}
         prefetch
         className={cn(
           "flex items-center justify-between bg-background rounded p-3 cursor-pointer hover:bg-muted transition-colors",
