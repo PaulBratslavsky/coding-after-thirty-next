@@ -2,9 +2,23 @@ import qs from "qs";
 import { getStrapiURL } from "@/lib/utils";
 import { getAuthToken } from "./get-token";
 
-export async function getUserMeLoader() {
+import { StrapiUserData } from "@/types/user";
+
+type GetUserMeLoaderResponse =
+  | { ok: true; data: StrapiUserData; error: null }
+  | { ok: false; data: null; error: unknown };
+
+export async function getUserMeLoader(): Promise<GetUserMeLoaderResponse> {
   const baseUrl = getStrapiURL();
   const url = new URL("/api/users/me", baseUrl);
+
+  url.search = qs.stringify({
+    populate: {
+      userProfile: {
+        fields: ["documentId"]
+      }
+    }
+  })
 
   const authToken = await getAuthToken();
   if (!authToken) return { ok: false, data: null, error: null };
@@ -27,14 +41,13 @@ export async function getUserMeLoader() {
   }
 }
 
-export async function getUserProfileLoader(id: number) {
+export async function getUserProfileByIdLoader(id: string) {
   const baseUrl = getStrapiURL();
-  const url = new URL(`/api/user-profiles`, baseUrl);
+  const url = new URL(`/api/user-profiles/${id}`, baseUrl);
+
+  console.log(id, "what is this")
 
   url.search = qs.stringify({
-    filters: {
-      user: id,
-    },
     populate: "*",
   });
 

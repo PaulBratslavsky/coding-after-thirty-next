@@ -1,18 +1,17 @@
-import { StrapiUserProfileData, StrapiUserMeProps } from "@/types/user";
-import { getUserMeLoader, getUserProfileLoader } from "@/lib/services/user";
+import { StrapiUserProfileData, StrapiUserData } from "@/types/user";
+import { getUserMeLoader, getUserProfileByIdLoader } from "@/lib/services/user";
 import { notFound } from "next/navigation";
 
-async function loader(): Promise<{ profile: StrapiUserProfileData | null, user: StrapiUserMeProps | null }> {
-  const user = await getUserMeLoader() ;
-  const userId = user.data?.id;
-  // const userId = 5;
+async function loader(): Promise<{ profile: StrapiUserProfileData, user: StrapiUserData }> {
+  const response = await getUserMeLoader();
+  const profileUserId = response?.data?.userProfile?.documentId;
 
-  if (!userId) return notFound();
+  if (!profileUserId) return notFound();
 
   try {
-    const response = await getUserProfileLoader(userId) 
-    return { profile: response?.data?.data[0]  || null,
-      user: user.data
+    const response = await getUserProfileByIdLoader(profileUserId) 
+    return { profile: response?.data?.data || null,
+      user: response.data
     };
   } catch (error) {
     console.error(error);

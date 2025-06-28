@@ -3,6 +3,10 @@ export type StrapiUserData = {
   documentId: string;
   username: string;
   email: string;
+  userProfile: {
+    id: number,
+    documentId: string,
+  }
 }
 
 export type StrapiUserProfileData = {
@@ -14,8 +18,4 @@ export type StrapiUserProfileData = {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-}
-
-export type StrapiUserMeProps = {
-  user: StrapiUserData | null;
 }
