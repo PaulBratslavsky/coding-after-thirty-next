@@ -6,7 +6,7 @@ import type {
   HeadingProps,
   HeroProps,
 } from "./blocks";
-import type { StrapiUserMeProps } from "./user";
+import type { StrapiUserData } from "./user";
 
 export type {
   LinkProps,
@@ -15,7 +15,7 @@ export type {
   HeroProps,
   HeadingProps,
   Block,
-  StrapiUserMeProps,
+  StrapiUserData,
   ContentWithImageProps,
   HeaderProps,
 };

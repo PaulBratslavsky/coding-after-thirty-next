@@ -13,18 +13,19 @@ import {
 } from "@/components/ui/sheet";
 
 import { AuthButton } from "@/components/custom/auth/auth-button";
-import { StrapiUserMeProps } from "@/types";
+import { StrapiUserData } from "@/types";
 import { NavLinkItems } from "./nav-link-items";
 import { ThemeToggle } from "@/components/custom/theme-toggle";
 import { StrapiImage } from "@/components/custom/strapi-image";
 import { HeaderProps } from "@/types/base";
+import { AuthUserNavButton } from "../auth";
 
 interface MobileNavigationProps {
-  headerData: HeaderProps;
-  user: StrapiUserMeProps | null;
+  readonly headerData: HeaderProps;
+  readonly user: StrapiUserData | null;
 }
 
-export function MobileNavigation({ headerData }: MobileNavigationProps) {
+export function MobileNavigation({ headerData, user }: MobileNavigationProps) {
   const { logoText, navItems, cta, logoImage } = headerData;
 
   return (
@@ -67,7 +68,7 @@ export function MobileNavigation({ headerData }: MobileNavigationProps) {
           </div>
         </div>
         <SheetFooter className="flex flex-row gap-2">
-          <AuthButton label="Sign In" />
+          <>{user ? <AuthUserNavButton user={user} /> : <AuthButton label="Sign In" />}</>      
           <ThemeToggle />
         </SheetFooter>
       </SheetContent>

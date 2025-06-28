@@ -34,7 +34,7 @@ export function CourseItem({
   pathname,
 }: {
   readonly course: CourseProps;
-  readonly user: StrapiUserProps;
+  readonly user: StrapiUserProps | null;
   readonly pathname: string;
 }) {
   const { documentId, title, description, slug, createdAt, image } = course;

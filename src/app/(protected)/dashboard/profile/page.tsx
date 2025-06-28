@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 
 async function loader(): Promise<{ profile: StrapiUserProfileData, user: StrapiUserData }> {
   const response = await getUserMeLoader();
+  
+  console.log(response)
   const profileUserId = response?.data?.userProfile?.documentId;
 
   if (!profileUserId) return notFound();

@@ -27,7 +27,6 @@ export default async function DashboardRoute({
   readonly children: React.ReactNode;
 }) {
   const user = await loader();
-  const { username, email } = user;
 
 
   return (
@@ -40,10 +39,10 @@ export default async function DashboardRoute({
             <div className="space-y-2">
               <div>
                 <h2 className="text-xl font-bold mb-4">User Menu</h2>
-                <div className="space-y-2">
-                  <div>Username: {username}</div>
-                  <div>Email: {email}</div>
-                </div>
+              { user &&  <div className="space-y-2">
+                  <div>Username: {user.username}</div>
+                  <div>Email: {user.email}</div>
+                </div>}
               </div>
             </div>
           </ScrollArea>

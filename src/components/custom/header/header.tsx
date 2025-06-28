@@ -1,12 +1,11 @@
 import Link from "next/link";
 
-import { HeaderProps } from "@/types";
+import { HeaderProps, StrapiUserData } from "@/types";
 import { notFound } from "next/navigation";
 import { getGlobalPageData } from "@/data-utils/loaders";
 
 import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
 import { Button } from "@/components/ui/button";
-import { StrapiUserMeProps } from "@/types";
 import { MobileNavigation } from "./mobile-navbar";
 import { NavLinkItems } from "./nav-link-items";
 import { ThemeToggle } from "../theme-toggle";
@@ -23,7 +22,7 @@ async function loader(): Promise<HeaderProps> {
   }
 }
 
-export async function Header({ user }: Readonly<StrapiUserMeProps>) {
+export async function Header({ user }: { readonly user: StrapiUserData | null}) {
   const headerData = await loader();
   const { logoText, navItems, cta, showSignUp } = headerData;
 
@@ -72,7 +71,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
             )} */}
             
             {showSignUp && (
-              <>{user ? <AuthUserNavButton user={user} /> : <AuthButton />}</>
+              <>{user ? <AuthUserNavButton user={user} className="hidden"/> : <AuthButton />}</>
             )}
           </div>
           <ThemeToggle />
@@ -81,7 +80,7 @@ export async function Header({ user }: Readonly<StrapiUserMeProps>) {
         <div className="flex items-center gap-2 lg:hidden">
           <MobileNavigation
             headerData={headerData}
-            user={user as unknown as StrapiUserMeProps}
+            user={user}
           />
         </div>
       </div>
