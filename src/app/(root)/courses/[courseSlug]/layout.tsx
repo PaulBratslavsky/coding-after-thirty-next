@@ -32,7 +32,6 @@ interface LessonListProps {
 
 interface ParamsProps {
   courseSlug: string;
-  lessonSlug: string;
 }
 
 export default async function DashboardRoute({
