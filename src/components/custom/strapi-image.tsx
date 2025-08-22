@@ -8,6 +8,7 @@ interface StrapiImageProps {
   className?: string;
   fill?: boolean;
   priority?: boolean;
+  unoptimized?: boolean;
 }
 
 export function getStrapiMedia(url: string | null) {
@@ -22,15 +23,22 @@ export function StrapiImage({
   src,
   alt,
   className,
+  unoptimized,
   ...rest
 }: Readonly<StrapiImageProps>) {
   const imageUrl = getStrapiMedia(src);
   if (!imageUrl) return null;
+  
+  // Check if it's a GIF file and auto-set unoptimized
+  const isGif = imageUrl.toLowerCase().includes('.gif');
+  const shouldBeUnoptimized = unoptimized || isGif;
+  
   return (
     <Image
       src={imageUrl}
       alt={alt ?? "No alternative text provided"}
       className={className}
+      unoptimized={shouldBeUnoptimized}
       {...rest}
     />
   );
