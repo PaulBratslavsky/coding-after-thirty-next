@@ -2,10 +2,10 @@ import qs from "qs";
 import { getStrapiURL } from "@/lib/utils";
 import { getAuthToken } from "./get-token";
 
-import { StrapiUserData } from "@/types/user";
+import { TStrapiUserData } from "@/types/user";
 
 type GetUserMeLoaderResponse =
-  | { ok: true; data: StrapiUserData; error: null }
+  | { ok: true; data: TStrapiUserData; error: null }
   | { ok: false; data: null; error: unknown };
 
 export async function getUserMeLoader(): Promise<GetUserMeLoaderResponse> {
@@ -33,7 +33,6 @@ export async function getUserMeLoader(): Promise<GetUserMeLoaderResponse> {
     });
 
     const data = await response.json();
-    console.dir(data, { depth: null })
     if (data.error) return { ok: false, data: null, error: data.error };
     return { ok: true, data: data, error: null };
   } catch (error) {
@@ -64,8 +63,6 @@ export async function getUserProfileByIdLoader(id: string) {
       },
     });
     const data = await response.json();
-        console.dir(data, { depth: null })
-
     if (data.error) return { ok: false, data: null, error: data.error };
     return { ok: true, data: data, error: null };
   } catch (error) {

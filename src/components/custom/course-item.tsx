@@ -1,7 +1,6 @@
+import type { TCourseData, TStrapiUserData } from "@/types";
 import Link from "next/link";
-
 import { formatDate } from "@/lib/utils";
-import type { ImageProps } from "@/types";
 
 import { CarouselItem } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,33 +8,14 @@ import { Button } from "@/components/ui/button";
 import { StrapiImage } from "@/components/custom/strapi-image";
 import { AuthButton } from "./auth/auth-button";
 
-export interface StrapiUserProps{
-  id: number;
-  documentId: string;
-  username: string;
-  email: string;
-}
-
-
-export interface CourseProps {
-  id: number;
-  documentId: string;
-  title: string;
-  description: string;
-  isPremium: boolean;
-  slug: string;
-  createdAt: string;
-  image: ImageProps;
-}
-
 export function CourseItem({
   course, 
   user,
   pathname,
 }: {
-  readonly course: CourseProps;
-  readonly user: StrapiUserProps | null;
-  readonly pathname: string;
+  course: TCourseData;
+  user: TStrapiUserData | null;
+  pathname: string;
 }) {
   const { documentId, title, description, slug, createdAt, image } = course;
   return (

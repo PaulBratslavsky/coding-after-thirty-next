@@ -1,4 +1,4 @@
-import { getUserMeLoader } from "@/lib/services/user";
+import { getUserMeLoader } from "@/data-utils/services/user";
 import { Header } from "@/components/custom/header";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,13 +12,8 @@ import {
 } from "@/components/ui/resizable";
 
 async function loader() {
-  try {
-    const user = await getUserMeLoader();
-    return user?.data;
-  } catch (error) {
-    console.error("Failed to load user:", error);
-    throw error;
-  }
+  const user = await getUserMeLoader();
+  return user?.data;
 }
 
 export default async function DashboardRoute({

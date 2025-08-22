@@ -3,9 +3,21 @@ import ReactMarkdown from "react-markdown";
 
 import { StrapiImage } from "@/components/custom/strapi-image";
 import { cn } from "@/lib/utils";
-import type { ContentWithImageProps } from "@/types/blocks";
+import type { Base, TLink } from "@/types";
 
-export function ContentWithImage(data: Readonly<ContentWithImageProps>) {
+export interface IContentWithImageProps extends Base<"blocks.content-with-image"> {
+  reverse: boolean;
+  image: {
+    url: string;
+    name: string;
+  };
+  heading: string;
+  subHeading: string;
+  text: string;
+  link?: TLink;
+}
+
+export function ContentWithImage(data: IContentWithImageProps) {
   if (!data) return null;
   const { reverse, image, heading, subHeading, text, link } = data;
   const revereStyle = reverse ? "md:flex-row-reverse" : "md:flex-row";

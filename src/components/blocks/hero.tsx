@@ -2,7 +2,15 @@ import Link from "next/link";
 
 import { StrapiImage } from "@/components/custom/strapi-image";
 import { Button } from "@/components/ui/button";
-import type { HeroProps } from "@/types/blocks";
+import type { TLink, TImage, Base} from "@/types";
+
+export interface IHeroProps extends Base<"blocks.hero"> {
+  subHeading: string;
+  heading: string;
+  text: string;
+  links?: TLink[];
+  image: TImage;
+}
 
 export function Hero({
   subHeading,
@@ -10,7 +18,7 @@ export function Hero({
   text,
   links,
   image,
-}: Readonly<HeroProps>) {
+}: Readonly<IHeroProps>) {
   return (
     <section className="container h-full flex flex-col items-center gap-10 pb-10 pt-20 sm:gap-14 lg:flex-row">
       <div className="flex flex-1 flex-col items-center gap-8 lg:items-start lg:gap-10">
@@ -26,7 +34,7 @@ export function Hero({
           {text}
         </p>
         <div className="grid grid-cols-2 gap-3">
-          {links.map((link, index) => {
+          {links && links.map((link, index) => {
             return (
               <Button
                 key={index}

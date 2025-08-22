@@ -1,59 +1,41 @@
 import { notFound } from "next/navigation";
-
-
-
+import { loaders } from "@/data-utils/loaders";
+import { validateApiResponse } from "@/lib/error-handler";
 import { MarkdownText } from "@/components/custom/markdown-text";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { MediaPlayer } from "@/components/custom/media-player";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { getLessonBySlug } from "@/data-utils/loaders";
-
-interface ParamsProps {
-  courseSlug: string;
-  lessonSlug: string;
-}
-
-// interface LessonData {
-//   title: string;
-//   description: string;
-//   content: string;
-//   resources: string;
-//   player: { videoId: string; timecode: number }[];
-//   documentId: string;
-// }
-
 
 async function loader(slug: string) {
-  try {
-    const data = await getLessonBySlug(slug);
-    const lessonData = data.data[0];
-    if (!lessonData) notFound();
-    return lessonData;
-  } catch (error) {
-    console.error("Failed to load lesson:", error);
-    throw error;
-  }
+  const response = await loaders.getLessonBySlug(slug);
+  const data = validateApiResponse(response, "lesson");
+  const lesson = data[0];
+  
+  if (!lesson) notFound();
+  
+  return lesson;
 }
 
-export default async function LessonRoute({
-  params,
-}: {
-  readonly params: Promise<ParamsProps>;
-}) {
-  const resolvedParams = await params;
-  const lessonData = await loader(resolvedParams.lessonSlug);
+type LessonPageProps = {
+  readonly params: Promise<{
+    courseSlug: string;
+    lessonSlug: string;
+  }>;
+};
 
-  const { title, description, content, resources, player } = lessonData;
+export default async function LessonPage({ params }: LessonPageProps) {
+  const { lessonSlug } = await params;
+  const lesson = await loader(lessonSlug);
+  const { title, description, content, resources, player } = lesson;
+  const video = player?.[0];
 
-
-  const video = player[0];
-
-
+  if (!video) {
+    return <div>No video available for this lesson</div>;
+  }
 
   return (
     <div className="p-2 h-[calc(100vh-72px)]">
@@ -68,7 +50,6 @@ export default async function LessonRoute({
                   controls
                 />
               </div>
-              {/* <LessonStatusButton documentId={documentId} /> */}
 
               <div>
                 <h1 className="text-3xl mt-2 mb-4 font-bold">{title}</h1>

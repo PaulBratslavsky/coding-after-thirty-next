@@ -16,7 +16,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import type { CardCarouselItem, CardCarouselProps } from "@/types/blocks";
+import type { Base } from "@/types";
+
+export interface ICardCarouselItem {
+  id: number;
+  heading: string;
+  subHeading: string;
+  text?: string;
+  icon: string;
+}
+
+export interface ICardCarouselProps extends Base<"blocks.card-carousel"> {
+  cards: ICardCarouselItem[];
+}
 
 function iconLookup(icon: string) {
   return {
@@ -47,7 +59,7 @@ function CardCarouselItem({
   heading,
   subHeading,
   icon,
-}: Readonly<CardCarouselItem>) {
+}: ICardCarouselItem) {
   return (
     <CarouselItem className="md:basis-1/2 lg:basis-1/3">
       <div className="h-full p-1">
@@ -73,7 +85,7 @@ function CardCarouselItem({
   );
 }
 
-export function CardCarousel({ cards }: CardCarouselProps) {
+export function CardCarousel({ cards }: ICardCarouselProps) {
   return (
     <section className="container flex flex-col items-center gap-6 py-24 sm:gap-7">
       <Carousel

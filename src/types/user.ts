@@ -1,4 +1,4 @@
-export type StrapiUserData = {
+export type TStrapiUserData = {
   id: number;
   documentId: string;
   username: string;
@@ -9,7 +9,7 @@ export type StrapiUserData = {
   }
 }
 
-export type StrapiUserProfileData = {
+export type TStrapiUserProfileData = {
   id: number;
   documentId: string;
   name: string;

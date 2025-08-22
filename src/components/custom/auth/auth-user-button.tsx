@@ -1,11 +1,16 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import type { StrapiUserData } from "@/types";
+import type { TStrapiUserData } from "@/types";
 import { AuthLogoutButton } from "./auth-logout-button";
 import { cn } from "@/lib/utils";
 
-export function AuthUserNavButton({ user, className } : { readonly user: StrapiUserData, readonly className?: string }) {
+interface IAuthUserNavButtonProps {
+  user: TStrapiUserData;
+  className?: string;
+}
+
+export function AuthUserNavButton({ user, className } : IAuthUserNavButtonProps) {
   return (
     <div className={cn("items-center gap-2 md:flex", className)}>
       {user?.username}
