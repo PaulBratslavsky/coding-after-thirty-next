@@ -2,10 +2,9 @@
 
 import { useEffect, useState, useRef, useCallback } from "react"
 import dynamic from "next/dynamic"
-import type { default as ReactPlayerType } from "react-player"
 
 // Dynamically import ReactPlayer with no SSR
-const ReactPlayer = dynamic(() => import("react-player/youtube.js"), {
+const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
   loading: () => (
     <div className="relative aspect-video overflow-hidden rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
@@ -102,7 +101,7 @@ const playerCenterControls = "flex items-center justify-between px-8 mt-8 flex-1
 const playerBottomControls = "p-2 bg-gradient-to-t from-black/30 to-transparent"
 
 export function MediaPlayer({ videoId, timestamp, controls = false }: Readonly<MediaPlayerProps>) {
-  const playerRef = useRef<ReactPlayerType>(null)
+  const playerRef = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
   const [hovering, setHovering] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -117,8 +116,11 @@ export function MediaPlayer({ videoId, timestamp, controls = false }: Readonly<M
   const handleSeekToTimestamp = useCallback(
     (timestamp: number | undefined) => {
       if (timestamp && playerRef.current && mounted) {
-        playerRef.current.seekTo(timestamp)
-        setPlaying(true)
+        playerRef.current.currentTime = timestamp
+        if (playerRef.current.paused) {
+          playerRef.current.play()
+          setPlaying(true)
+        }
       }
     },
     [mounted],
@@ -126,19 +128,24 @@ export function MediaPlayer({ videoId, timestamp, controls = false }: Readonly<M
 
   const togglePlay = () => {
     if (playerRef.current && mounted) {
+      if (playing) {
+        playerRef.current.pause()
+      } else {
+        playerRef.current.play()
+      }
       setPlaying(!playing)
     }
   }
 
   const seekForward = () => {
     if (playerRef.current && mounted) {
-      playerRef.current.seekTo(playerRef.current.getCurrentTime() + 5)
+      playerRef.current.currentTime = playerRef.current.currentTime + 5
     }
   }
 
   const seekBackward = () => {
     if (playerRef.current && mounted) {
-      playerRef.current.seekTo(playerRef.current.getCurrentTime() - 5)
+      playerRef.current.currentTime = playerRef.current.currentTime - 5
     }
   }
 
@@ -148,18 +155,30 @@ export function MediaPlayer({ videoId, timestamp, controls = false }: Readonly<M
     }
   }, [timestamp, handleSeekToTimestamp, mounted])
 
-  const handleProgress = (state: { playedSeconds: number }) => {
-    setProgress(state.playedSeconds)
+  const handleTimeUpdate = () => {
+    if (playerRef.current) {
+      setProgress(playerRef.current.currentTime)
+    }
   }
 
-  const handleDuration = (duration: number) => {
-    setDuration(duration)
+  const handleDurationChange = () => {
+    if (playerRef.current) {
+      setDuration(playerRef.current.duration)
+    }
+  }
+
+  const handlePlay = () => {
+    setPlaying(true)
+  }
+
+  const handlePause = () => {
+    setPlaying(false)
   }
 
   const handleScrub = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = parseFloat(e.target.value)
     if (playerRef.current && mounted) {
-      playerRef.current.seekTo(newTime)
+      playerRef.current.currentTime = newTime
       setProgress(newTime)
     }
   }
@@ -182,14 +201,16 @@ export function MediaPlayer({ videoId, timestamp, controls = false }: Readonly<M
       <div className={playerWrapper}>
         <ReactPlayer
           ref={playerRef}
-          url={videoUrl}
+          src={videoUrl}
           width="100%"
           height="100%"
           controls={false}
           className={reactPlayer}
           playing={playing}
-          onProgress={handleProgress}
-          onDuration={handleDuration}
+          onTimeUpdate={handleTimeUpdate}
+          onDurationChange={handleDurationChange}
+          onPlay={handlePlay}
+          onPause={handlePause}
         />
         {controls && (
           <div
