@@ -1,23 +1,23 @@
-import { CardCarousel } from "@/components/blocks/card-carousel";
-import { ContentWithImage } from "@/components/blocks/content-with-image";
-import { Heading } from "@/components/blocks/heading";
-import { Hero } from "@/components/blocks/hero";
-import type { Block } from "@/types";
+import { Hero, type IHeroProps } from "@/components/blocks/hero";
+import { Heading, type IHeadingProps } from "@/components/blocks/heading";
+import { CardCarousel, type ICardCarouselProps } from "@/components/blocks/card-carousel";
+import { ContentWithImage, type IContentWithImageProps } from "@/components/blocks/content-with-image";
 
-const BLOCK_COMPONENTS = {
-  "blocks.hero": Hero,
-  "blocks.card-carousel": CardCarousel,
-  "blocks.heading": Heading,
-  "blocks.content-with-image": ContentWithImage,
-} as const;
+export type Block = IHeroProps | IHeadingProps | ICardCarouselProps | IContentWithImageProps;
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export function blockRenderer(block: Block, index: number) {
-  const Component =
-    BLOCK_COMPONENTS[block.__component as keyof typeof BLOCK_COMPONENTS];
-  if (!Component) return null;
-
-  return <Component {...(block as any)} key={index} />;
+  switch (block.__component) {
+    case "blocks.hero":
+      return <Hero {...block} key={index} />;
+    case "blocks.card-carousel":
+      return <CardCarousel {...block} key={index} />;
+    case "blocks.heading":
+      return <Heading {...block} key={index} />;
+    case "blocks.content-with-image":
+      return <ContentWithImage {...block} key={index} />;
+    default:
+      return null;
+  }
 }
 
 export function BlockRenderer({ blocks }: { blocks: Block[] }) {

@@ -1,28 +1,22 @@
 import Link from "next/link";
-
-import { HeaderProps, StrapiUserData } from "@/types";
-import { notFound } from "next/navigation";
-import { getGlobalPageData } from "@/data-utils/loaders";
+import { TStrapiUserData } from "@/types/user";
+import { loaders } from "@/data-utils/loaders";
 
 import { AuthButton, AuthUserNavButton } from "@/components/custom/auth";
+
 import { Button } from "@/components/ui/button";
 import { MobileNavigation } from "./mobile-navbar";
 import { NavLinkItems } from "./nav-link-items";
 import { ThemeToggle } from "../theme-toggle";
-// import { StrapiImage } from "@/components/custom/strapi-image";
+import { validateApiResponse } from "@/lib/error-handler";
 
-async function loader(): Promise<HeaderProps> {
-  try {
-    const data = await getGlobalPageData();
-    if (!data?.data) notFound();
-    return data?.data?.header;
-  } catch (error) {
-    console.error("Failed to load global data:", error);
-    throw error;
-  }
+async function loader() {
+    const response = await loaders.getGlobalPageData();
+    const data = validateApiResponse(response, "global")
+    return data.header;
 }
 
-export async function Header({ user }: { readonly user: StrapiUserData | null}) {
+export async function Header({ user }: { readonly user: TStrapiUserData | null}) {
   const headerData = await loader();
   const { logoText, navItems, cta, showSignUp } = headerData;
 

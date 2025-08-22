@@ -1,10 +1,10 @@
-import { getCourseBySlug } from "@/data-utils/loaders";
 import { notFound } from "next/navigation";
+import { loaders } from "@/data-utils/loaders";
+import { validateApiResponse } from "@/lib/error-handler";
+import { LessonLink } from "@/components/custom/lesson-link";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { LessonLink } from "@/components/custom/lesson-link";
-
 import {
   ResizableHandle,
   ResizablePanel,
@@ -12,40 +12,22 @@ import {
 } from "@/components/ui/resizable";
 
 async function loader(slug: string) {
-  try { 
-  const data = await getCourseBySlug(slug);
-  const courseData = data?.data[0];
+  const response = await loaders.getCourseBySlug(slug);
+  const data = validateApiResponse(response);
+  const courseData = data?.[0];
   if (!courseData) notFound();
   return courseData;
-} catch (error) {
-  console.error("Failed to load course:", error);
-  throw error;
-}
 }
 
-interface LessonListProps {
-  documentId: string;
-  slug: string;
-  title: string;
-  description: string;
-}
-
-interface ParamsProps {
-  courseSlug: string;
-}
-
-export default async function DashboardRoute({
-  params,
-  children,
-}: {
-  readonly params: Promise<ParamsProps>;
+type CourseLayoutProps = {
+  readonly params: Promise<{ courseSlug: string }>;
   readonly children: React.ReactNode;
-}) {
-  const resolvedParams = await params;  
-  const courseSlug = resolvedParams.courseSlug;
-  const data = await loader(courseSlug);
-  const courseList = data?.lessons;
+};
 
+export default async function CourseLayout({ params, children }: CourseLayoutProps) {
+  const { courseSlug } = await params;
+  const courseData = await loader(courseSlug);
+  const lessons = courseData.lessons || [];
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -55,7 +37,18 @@ export default async function DashboardRoute({
           <ScrollArea className="h-[calc(100vh-72px)] w-full p-4">
             <h2 className="text-xl font-bold mb-4">Lessons</h2>
             <div className="space-y-2">
-              {courseList ? courseList.map((lesson: LessonListProps, index: number) => <LessonLink pathname={"/courses/" + courseSlug} lesson={lesson} index={index} key={index} />  ) : <div>No lessons found</div>}
+              {lessons.length > 0 ? (
+                lessons.map((lesson, index) => (
+                  <LessonLink
+                    key={lesson.documentId}
+                    pathname={`/courses/${courseSlug}`}
+                    lesson={lesson}
+                    index={index}
+                  />
+                ))
+              ) : (
+                <div>No lessons found</div>
+              )}
             </div>
           </ScrollArea>
           <Separator />

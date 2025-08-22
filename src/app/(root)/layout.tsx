@@ -1,25 +1,21 @@
 import { Header } from "@/components/custom/header/header";
-import { getUserMeLoader } from "@/lib/services/user";
+import { getUserMeLoader } from "@/data-utils/services/user";
 
 // Force dynamic rendering for the entire app
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
-async function loader() {
-  try {
-    const user = await getUserMeLoader();
-    return user?.data;
-  } catch (error) {
-    console.error("Failed to load user:", error);
-    throw error;
-  }
+async function getCurrentUser() {
+  const user = await getUserMeLoader();
+  return user?.data;
 }
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const user = await loader();
+type RootLayoutProps = {
+  readonly children: React.ReactNode;
+};
+
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const user = await getCurrentUser();
+  
   return (
     <div>
       <Header user={user} />

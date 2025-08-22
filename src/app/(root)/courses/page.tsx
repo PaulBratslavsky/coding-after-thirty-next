@@ -1,9 +1,7 @@
-import type { ImageProps } from "@/types";
-import { notFound } from "next/navigation";
-
-import { getAllCourses } from "@/data-utils/loaders";
-import { getUserMeLoader } from "@/lib/services/user";
-
+import { loaders } from "@/data-utils/loaders";
+import { validateApiResponse } from "@/lib/error-handler";
+import { getUserMeLoader } from "@/data-utils/services/user";
+import { CourseItem } from "@/components/custom/course-item";
 import {
   Carousel,
   CarouselContent,
@@ -11,41 +9,19 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 
-import { CourseItem } from "@/components/custom/course-item";
-
-export interface CourseData {
-  id: number;
-  documentId: string;
-  title: string;
-  description: string;
-  isPremium: boolean;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  slug: string;
-  content: string | null;
-  image: ImageProps;
-}
-
 async function loader() {
-  try {
-  const data = await getAllCourses();
+  const response = await loaders.getAllCourses();
+  const data = validateApiResponse(response, "courses");
   const user = await getUserMeLoader();
 
-  if (!data?.data) notFound();
-
   return {
-    courseData: data.data,
+    courses: data,
     user: user?.data,
   };
-} catch (error) {
-  console.error("Failed to load courses:", error);
-  throw error;
-}
 }
 
-export default async function CoursesRoute() {
-  const { courseData, user } = await loader();
+export default async function CoursesPage() {
+  const { courses, user } = await loader();
 
   return (
     <section className="container mx-auto flex flex-col items-center gap-6 py-10 sm:gap-7">
@@ -55,12 +31,12 @@ export default async function CoursesRoute() {
       >
         <CarouselPrevious className="-left-6 size-7 xl:-left-12 xl:size-8" />
         <CarouselContent className="pb-4">
-          {courseData.map((course) => (
+          {courses.map((course) => (
             <CourseItem
-              course={course as CourseData}
               key={course.documentId}
+              course={course}
               user={user}
-              pathname={"/courses"}
+              pathname="/courses"
             />
           ))}
         </CarouselContent>

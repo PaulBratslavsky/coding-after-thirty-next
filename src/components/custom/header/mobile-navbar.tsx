@@ -1,4 +1,6 @@
 "use client";
+import { TStrapiUserData, THeaderProps } from "@/types";
+
 import { Hamburger } from "lucide-react";
 import Link from "next/link";
 
@@ -13,19 +15,17 @@ import {
 } from "@/components/ui/sheet";
 
 import { AuthButton } from "@/components/custom/auth/auth-button";
-import { StrapiUserData } from "@/types";
 import { NavLinkItems } from "./nav-link-items";
 import { ThemeToggle } from "@/components/custom/theme-toggle";
 import { StrapiImage } from "@/components/custom/strapi-image";
-import { HeaderProps } from "@/types/base";
 import { AuthUserNavButton } from "../auth";
 
-interface MobileNavigationProps {
-  readonly headerData: HeaderProps;
-  readonly user: StrapiUserData | null;
+interface IMobileNavigationProps {
+  readonly headerData: THeaderProps;
+  readonly user: TStrapiUserData | null;
 }
 
-export function MobileNavigation({ headerData, user }: MobileNavigationProps) {
+export function MobileNavigation({ headerData, user }: IMobileNavigationProps) {
   const { logoText, navItems, cta, logoImage } = headerData;
 
   return (

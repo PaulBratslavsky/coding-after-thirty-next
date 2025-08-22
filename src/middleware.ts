@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getUserMeLoader } from "@/lib/services/user"
+import { getUserMeLoader } from "@/data-utils/services/user"
 
 // Define an array of protected routes
 const protectedRoutes: string[] = [
   "/dashboard",
   "/dashboard/*", // This will match any path that starts with /dashboard/
+  "/courses/*", // Protect all course and lesson pages
 ]
 
 // Helper function to check if a path is protected

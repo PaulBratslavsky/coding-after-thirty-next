@@ -1,7 +1,20 @@
-import { sdk } from "@/lib/sdk";
+import type { TStrapiResponse, TLandingPageData, TGlobalData, TCourseData, TCourseWithLessonsData, TLessonDetailData } from "@/types";
 
-export async function getHomePage() {
-  const data = await sdk.single("home-page").find({
+import qs from "qs";
+import { api } from "@/data-utils/data-api";
+import { getStrapiURL } from "@/lib/utils";
+
+const baseUrl = getStrapiURL();
+const authToken = process.env.STRAPI_API_KEY;
+
+
+async function getGlobalPageData(): Promise<TStrapiResponse<TGlobalData>> {
+  const url = new URL("/api/global", baseUrl);
+  return api.get<TGlobalData>(url.href, { authToken });
+}
+
+function getLandingPage(): Promise<TStrapiResponse<TLandingPageData>> {
+  const query = qs.stringify({
     populate: {
       blocks: {
         on: {
@@ -18,40 +31,32 @@ export async function getHomePage() {
               cards: true,
             },
           },
-          // "blocks.heading": true,
-          // "blocks.content-with-image": {
-          //   populate: {
-          //     image: {
-          //       fields: ["url", "alternativeText"],
-          //     },
-          //     link: true,
-          //   },
-          // },
         },
       },
     },
   });
-  return data;
+
+  const url = new URL("/api/home-page", baseUrl);
+  url.search = query;
+  return api.get<TLandingPageData>(url.href, { authToken });
 }
 
-export async function getGlobalPageData() {
-  const data = await sdk.single("global").find();
-  return data;
-}
-
-export async function getAllCourses() {
-  const data = await sdk.collection("courses").find({
+async function getAllCourses(): Promise<TStrapiResponse<TCourseData[]>> {
+  const query = qs.stringify({
     populate: {
       image: {
         fields: ["url", "alternativeText", "formats"],
       },
     },
   });
-  return data;
+
+  const url = new URL("/api/courses", baseUrl);
+  url.search = query;
+  return api.get<TCourseData[]>(url.href, { authToken });
 }
 
-export async function getCourseBySlug(slug: string) {
-  const data = await sdk.collection("courses").find({
+async function getCourseBySlug(slug: string): Promise<TStrapiResponse<TCourseWithLessonsData[]>> {
+  const query = qs.stringify({
     filters: {
       slug: slug,
     },
@@ -61,15 +66,31 @@ export async function getCourseBySlug(slug: string) {
       },
     },
   });
-  return data;
+
+  const url = new URL("/api/courses", baseUrl);
+  url.search = query;
+  return api.get<TCourseWithLessonsData[]>(url.href, { authToken });
 }
 
-export async function getLessonBySlug(slug: string) {
-  const data = await sdk.collection("lessons").find({
+async function getLessonBySlug(slug: string): Promise<TStrapiResponse<TLessonDetailData[]>> {
+  const query = qs.stringify({
     filters: {
       slug: slug,
     },
     populate: "*",
   });
-  return data;
+
+  const url = new URL("/api/lessons", baseUrl);
+  url.search = query;
+  return api.get<TLessonDetailData[]>(url.href, { authToken });
 }
+
+
+
+export const loaders = {
+  getLandingPage,
+  getGlobalPageData,
+  getAllCourses,
+  getCourseBySlug,
+  getLessonBySlug,
+};

@@ -1,6 +1,5 @@
 import React from "react";
 import Markdown from "react-markdown";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { cn } from "@/lib/utils";
@@ -11,7 +10,7 @@ const MarkdownImage = ({ src, alt, ...props }: ImgHTMLAttributes<HTMLImageElemen
   <StrapiImage src={String(src ?? '')} alt={alt ?? ''} className="rounded-sm object-cover w-full h-full my-4" {...props} height={400} width={600}/>
 );
 
-const MarkdownVideo = ({ src, children, ...props }: React.VideoHTMLAttributes<HTMLVideoElement>) => {
+const MarkdownVideo = ({ children, ...props }: React.VideoHTMLAttributes<HTMLVideoElement>) => {
   return (
     <div className="w-full my-6">
       <div className="relative aspect-video w-full overflow-hidden rounded-lg">
@@ -32,14 +31,14 @@ const MarkdownSource = ({ src, ...props }: React.SourceHTMLAttributes<HTMLSource
   return <source src={sourceUrl || undefined} {...props} />;
 };
 
-const MarkdownParagraph = ({ children, ...props }: any) => {
+const MarkdownParagraph = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => {
   // Check if children contains only an img or video element
   const childArray = React.Children.toArray(children);
   const hasOnlyMediaElement = childArray.length === 1 && 
     React.isValidElement(childArray[0]) && 
-    ((childArray[0] as any).type === 'img' || 
-     (childArray[0] as any).type === 'video' ||
-     (childArray[0] as any).props?.src); // Image/video elements will have src prop
+    ((childArray[0] as React.ReactElement).type === 'img' || 
+     (childArray[0] as React.ReactElement).type === 'video' ||
+     (childArray[0] as React.ReactElement<{ src?: string }>).props?.src); // Image/video elements will have src prop
   
   // If it only contains media (img/video), render as a fragment to avoid invalid nesting
   if (hasOnlyMediaElement) {
