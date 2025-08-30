@@ -1,4 +1,4 @@
-import type { TStrapiResponse, TLandingPageData, TGlobalData, TCourseData, TCourseWithLessonsData, TLessonDetailData } from "@/types";
+import type { TStrapiResponse, TLandingPageData, TGlobalData, TCourseData, TCourseWithLessonsData, TLessonDetailData, TItemData } from "@/types";
 
 import qs from "qs";
 import { api } from "@/data-utils/data-api";
@@ -85,6 +85,20 @@ async function getLessonBySlug(slug: string): Promise<TStrapiResponse<TLessonDet
   return api.get<TLessonDetailData[]>(url.href, { authToken });
 }
 
+async function getAllItems(): Promise<TStrapiResponse<TItemData[]>> {
+  
+  const query = qs.stringify({
+    populate: "*",
+  });
+
+  const url = new URL("/api/items", baseUrl);
+  url.search = query;
+  return api.get<TItemData[]>(url.href, { authToken });
+}
+
+
+
+
 
 
 export const loaders = {
@@ -93,4 +107,5 @@ export const loaders = {
   getAllCourses,
   getCourseBySlug,
   getLessonBySlug,
+  getAllItems,
 };

@@ -109,6 +109,21 @@ export type TLessonData = {
   description: string;
 };
 
+
+export type TItemData = {
+  id: number;
+  documentId: string;
+  title: string;
+  description: string;
+  dueDate: Date;
+  step: "inbox" | "progress" | "schedule" | "completed";
+  category: {
+    id: number;
+    documentId: string;
+    title: string;
+  }
+};
+
 export type TCourseWithLessonsData = TCourseData & {
   lessons: TLessonData[];
 };
