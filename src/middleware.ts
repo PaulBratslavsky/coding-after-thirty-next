@@ -1,70 +1,17 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { getUserMeLoader } from "@/data-utils/services/user"
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-// Define an array of protected routes
-const protectedRoutes: string[] = [
-  "/dashboard",
-  "/dashboard/*", // This will match any path that starts with /dashboard/
-  "/courses/*", // Protect all course and lesson pages
-]
+// While the site is rebuilt it shows only its public pages; every other route goes home.
+// The course, dashboard and sign-in routes are still in the code, unreachable, and the
+// auth-checking middleware they used is in git history (before the legal-pages-for-oauth branch).
+const publicPaths = new Set(["/", "/privacy", "/terms"]);
 
-// Helper function to check if a path is protected
-function isProtectedRoute(path: string): boolean {
-  if (!path || protectedRoutes.length === 0) return false
-  return protectedRoutes.some((route) => {
-    // For exact matches
-    if (!route.includes("*")) {
-      return path === route
-    }
-
-    // For wildcard routes (e.g., /dashboard/*)
-    const basePath = route.replace("/*", "")
-    return path === basePath || path.startsWith(`${basePath}/`)
-  })
+export function middleware(request: NextRequest) {
+  if (publicPaths.has(request.nextUrl.pathname)) return NextResponse.next();
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
-export async function middleware(request: NextRequest) {
-  const user = await getUserMeLoader()
-  const currentPath = request.nextUrl.pathname
-
-  if (isProtectedRoute(currentPath) && user.ok === false) {
-    const redirectUrl = new URL("/", request.url)
-    redirectUrl.searchParams.set("redirect", currentPath)
-
-    // Create the redirect response
-    const response = NextResponse.redirect(redirectUrl)
-
-    // Set the cookie on the response object, not the request
-    response.cookies.set({
-      name: "redirectUrl",
-      value: currentPath,
-      path: "/",
-      httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 24, // 1 day in seconds
-    })
-
-    return response
-  }
-
-  return NextResponse.next()
-}
-
-// Configure matcher for better performance
 export const config = {
-  matcher: [
-    // Match /dashboard and any path under /dashboard
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    "/dashboard",
-    "/dashboard/:path*",
-  ],
-}
-
+  // Everything except Next's own assets and files with an extension (favicon, public/*.svg).
+  matcher: ["/((?!_next/static|_next/image|.*\\..*).*)"],
+};
