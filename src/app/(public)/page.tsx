@@ -21,9 +21,7 @@ export default function HomePage() {
       <section className={styles.card}>
         <h2 className={styles.cardTitle}>Our YouTube tools</h2>
         <p className={styles.cardText}>
-          I use private tools that connect to my own YouTube channels through Google&apos;s APIs, to
-          read my videos and analytics and to update titles, descriptions and thumbnails after I
-          review them. They work only on channels I own and are not offered to anyone else.
+          Private tools we use to manage our own YouTube channels. Not offered to the public.
         </p>
         <div className={styles.cardLinks}>
           <Link href="/privacy" className={styles.link}>
