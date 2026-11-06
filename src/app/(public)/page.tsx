@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { APP_NAME, OWNER_NAME, YOUTUBE_URL } from "@/lib/site";
+import { OWNER_NAME, YOUTUBE_URL } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
@@ -19,12 +19,11 @@ export default function HomePage() {
       </section>
 
       <section className={styles.card}>
-        <h2 className={styles.cardTitle}>{APP_NAME}</h2>
+        <h2 className={styles.cardTitle}>Our YouTube tools</h2>
         <p className={styles.cardText}>
-          {APP_NAME} is the private tool I use to run my own YouTube channels. With my permission
-          it reads my videos, comments and analytics, and helps me package new videos (titles,
-          descriptions and thumbnails), which I review before anything changes. It works only on
-          channels I own and is not offered to anyone else.
+          I use private tools that connect to my own YouTube channels through Google&apos;s APIs, to
+          read my videos and analytics and to update titles, descriptions and thumbnails after I
+          review them. They work only on channels I own and are not offered to anyone else.
         </p>
         <div className={styles.cardLinks}>
           <Link href="/privacy" className={styles.link}>
